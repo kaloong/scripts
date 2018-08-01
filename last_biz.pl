@@ -28,12 +28,12 @@ sub set_and_print_last_biz{
         $lbd=DateTime->from_epoch(epoch=> $last_biz_day);
         if ( length $lbd->day == 1 )
                                {
-                                       print "-> Last biz date of month is a single digit, add an extra spacer.\n";
-                                       $ldb_spacer = "..";
+                                       print "-> Last biz date of month is a single digit, add an extra space.\n";
+                                       $lbd_spacer = "..";
                                }
                                if ( length $cbd->day == 1 )
                                {
-                                       print "-> current biz date of month is a single digit, add an extra spacer.\n";
+                                       print "-> current biz date of month is a single digit, add an extra space.\n";
                                        $cbd_spacer = "..";
                                }
         $mail_subj = $lbd->month_abbr.$lbd_spacer.$lbd->day." ".$lbd->year."........ to ".$cbd->month_abbr.$cbd_spacer.$cbd->day." ".$cbd->year;

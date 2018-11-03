@@ -318,7 +318,7 @@ function FUNC_CHECK_AUDITLOG {
 	######################################################################################
 	#                                                                                    #
 	# First it runs an aureport and generate $FILE_AU_AUDIT_AUREPORT. It then search for # 
-        # the aureport. It after tail -2 and finds <no events ....> then no need to progress # 
+    # the aureport. It after tail -2 and finds <no events ....> then no need to progress #
 	# further. See below an example of the output and why the tail -2 and not -1.        #
 	#                                                                                    #
 	# Sample output.                                                                     #
@@ -421,9 +421,9 @@ function FUNC_CHECK_AUDITLOG {
  	#                                                                                            # 
  	# MAIL STATUS CHECK:                                                                         # 
 	# If after egrep, all we have left is the "===..." aka PARAM_AU_AUDIT_MAIL_LINE_1 or find    #
-        # PARAM_AU_AUDIT_ACCESS_NOT_FOUND in the last line, we can change PARAM_AU_AUDIT_MAIL_STATUS #
+    # PARAM_AU_AUDIT_ACCESS_NOT_FOUND in the last line, we can change PARAM_AU_AUDIT_MAIL_STATUS #
 	# to *NO ACCESS* and pipe PARAM_AU_AUDIT_ACCESS_NOT_FOUND into FILE_AU_AUDIT_RESULT_FILE.    #
-        # Otherwise change the mail status and pipe the result accordingly.                          # 
+    # Otherwise change the mail status and pipe the result accordingly.                          #
  	#                                                                                            #
 	##############################################################################################
 	

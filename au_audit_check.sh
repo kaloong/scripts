@@ -6,7 +6,7 @@
 # Program dependency . . . . . . . . . . . :   au_audit_filter.cfg              #
 # Date         . . . . . . . . . . . . . . :   25/06/2018                       #
 # It is running every day before 0600 via root crontab.                         #
-# The script interrogate the auditlog and send a report to me via email.        # 
+# The script interrogates the auditlog and send a report to me via email.       #
 #                                                                               #
 # Modification History                                                          #
 # 25/06/18 KT - First edition au_audit_check.sh.                                #

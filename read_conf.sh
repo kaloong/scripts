@@ -62,8 +62,11 @@ function FUNC_READ_CONF {
 }
 
 function FUNC_TRANSFER_FILE {
-    local param_target_file=$1
-    echo -e "[T]: └── Transfer $param_target_file from ${PARAM_CLIENT_CONF_AA[source_dir]} to ${PARAM_CLIENT_CONF_AA[destination_dir]}"
+    local param_target_dir=$1
+    local param_target_base_dir=$(basename $1)
+    local param_target_file=$2
+    #echo -e "[T]: └── Transfer $param_target_file from ${PARAM_CLIENT_CONF_AA[source_dir]} to ${PARAM_CLIENT_CONF_AA[destination_dir]}"
+    echo -e "[T]: └── Transfer $param_target_file from $param_target_dir to ${PARAM_CLIENT_CONF_AA[destination_dir]}/$param_target_base_dir"
     return 0
 }
 function FUNC_INSPECT_SOURCE_DIR {
@@ -72,28 +75,43 @@ function FUNC_INSPECT_SOURCE_DIR {
 #echo -e "${!PARAM_CLIENT_CONF_AA[@]}."
 #echo -e "[i]: ${PARAM_CLIENT_CONF_AA[source_dir]}."
     #if source_dir exists, list the directory
-    temp_source_dir=${PARAM_CLIENT_CONF_AA[source_dir]}
-    if [[ -d $temp_source_dir ]]
+    client_source_dir=${PARAM_CLIENT_CONF_AA[source_dir]}
+    if [[ -d $client_source_dir ]]
     then
-        temp=$(find $temp_source_dir)
-        for f in $temp; do
+        temp_file=$(find $client_source_dir -maxdepth 1)
+        for f in $temp_file; do
             if [[ ! -d $f ]]
             then
+                dname=$(dirname $f)
+                fname=$(basename $f)
                 check_result=$(FUNC_SIZE_CHECKER $f)
                 if [[ ${check_result^^} == "TRUE" ]]
                 then
                     echo -e "[i]: $f status is good."
                     #or echo -e "[i]: $f $(echo $?)"
-                    FUNC_TRANSFER_FILE $f
+                    FUNC_TRANSFER_FILE $dname $fname
                 else
                     echo -e "[i]: $f status is still changing. Try back again."
                     #Add to later
                 fi
-            else
-                #Need to work on directory
-                #Check if files within directory are all ready.
-                #
-                echo -e
+            fi
+        done
+        temp_dir=$(find $client_source_dir -type d)
+        for f in $temp_dir; do
+            if [[ -d $f ]]
+            then
+                dname=$(dirname $f)
+                fname=$(basename $f)
+                check_result=$(FUNC_SIZE_CHECKER $f)
+                if [[ ${check_result^^} == "TRUE" ]]
+                then
+                    echo -e "[i]: $f status is good."
+                    #or echo -e "[i]: $f $(echo $?)"
+                    FUNC_TRANSFER_FILE $dname $fname
+                else
+                    echo -e "[i]: $f status is still changing. Try back again."
+                    #Add to later
+                fi
             fi
         done
     fi

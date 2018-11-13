@@ -87,7 +87,7 @@ function FUNC_INSPECT_SOURCE_DIR {
                 dname=$(dirname $f)
                 fname=$(basename $f)
                 check_result=$(FUNC_SIZE_CHECKER $f)
-                if [[ ${check_result^^} == "False" ]]
+                if [[ ${check_result^^} == "FALSE" ]]
                 then
                     echo -e "[i]: $f is still transferring. Try back again."
                     #Add to later
@@ -122,7 +122,7 @@ function FUNC_INSPECT_SOURCE_DIR {
             fname=$(basename $d)
             if [[ ${BOOL_GO_TRANSFER^^} == "FALSE" ]]
             then
-                echo -e "[i]: Some files in $d is still transferring. Try back again."
+                echo -e "[i]: Some file(s) in $d are still transferring. Try back again."
             else
                 FUNC_TRANSFER_FILE $d $fname
             fi

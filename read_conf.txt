@@ -1,0 +1,42 @@
+[i]: Read Client config files	: template.conf.d/client1.conf
+[i]: ---------------------------------------------------------
+
+[i]: Read Client config files	: template.conf.d/client2.conf
+[i]: ---------------------------------------------------------
+[i]: /home/mensa/lv1/lv1_file2 is ready to be transferred.
+[T]: └── Transfer lv1_file2 from /home/mensa/lv1 to /home/mensa/lv6/lv1
+[i]: /home/mensa/lv1/lv1_file1 is still transferring. Try back again.
+[i]: /home/mensa/lv1/lv2b/lv3/lv3_file1 is ready to be transferred.
+[i]: /home/mensa/lv1/lv2b/lv3/lv3_file2 is ready to be transferred.
+[i]: /home/mensa/lv1/lv2b/lv2b_file1 is still transferring. Try back again.
+[i]: /home/mensa/lv1/lv2b/lv2b_file2 is ready to be transferred.
+[i]: Some file(s) in /home/mensa/lv1/lv2b are still transferring. Try back again.
+[i]: /home/mensa/lv1/lv2a/lv2a_file1 is ready to be transferred.
+[i]: /home/mensa/lv1/lv2a/lv2a_file2 is ready to be transferred.
+[T]: └── Transfer lv2a from /home/mensa/lv1/lv2a to /home/mensa/lv6/lv2a
+
+[i]: Read Client config files	: template.conf.d/template.conf
+[i]: ---------------------------------------------------------
+
+
+[i]: Read Client config files	: template.conf.d/client1.conf
+[i]: ---------------------------------------------------------
+
+[i]: Read Client config files	: template.conf.d/client2.conf
+[i]: ---------------------------------------------------------
+[i]: /home/mensa/lv1/lv1_file2 is ready to be transferred.
+[T]: └── Transfer lv1_file2 from /home/mensa/lv1 to /home/mensa/lv6/lv1
+[i]: /home/mensa/lv1/lv1_file1 is ready to be transferred.
+[T]: └── Transfer lv1_file1 from /home/mensa/lv1 to /home/mensa/lv6/lv1
+[i]: /home/mensa/lv1/lv2b/lv3/lv3_file1 is ready to be transferred.
+[i]: /home/mensa/lv1/lv2b/lv3/lv3_file2 is ready to be transferred.
+[i]: /home/mensa/lv1/lv2b/lv2b_file1 is ready to be transferred.
+[i]: /home/mensa/lv1/lv2b/lv2b_file2 is ready to be transferred.
+[T]: └── Transfer lv2b from /home/mensa/lv1/lv2b to /home/mensa/lv6/lv2b
+[i]: /home/mensa/lv1/lv2a/lv2a_file1 is ready to be transferred.
+[i]: /home/mensa/lv1/lv2a/lv2a_file2 is ready to be transferred.
+[T]: └── Transfer lv2a from /home/mensa/lv1/lv2a to /home/mensa/lv6/lv2a
+
+[i]: Read Client config files	: template.conf.d/template.conf
+[i]: ---------------------------------------------------------
+

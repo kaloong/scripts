@@ -66,6 +66,7 @@ function FUNC_TRANSFER_FILE {
     local param_target_base_dir=$(basename $1)
     local param_target_file=$2
     #echo -e "[T]: └── Transfer $param_target_file from ${PARAM_CLIENT_CONF_AA[source_dir]} to ${PARAM_CLIENT_CONF_AA[destination_dir]}"
+    #echo -e "[T]: └── Transfer $param_target_file from $param_target_dir to ${PARAM_CLIENT_CONF_AA[destination_dir]}/$param_target_base_dir"
     echo -e "[T]: └── Transfer $param_target_file from $param_target_dir to ${PARAM_CLIENT_CONF_AA[destination_dir]}/$param_target_base_dir"
     return 0
 }
@@ -78,6 +79,7 @@ function FUNC_INSPECT_SOURCE_DIR {
     client_source_dir=${PARAM_CLIENT_CONF_AA[source_dir]}
     if [[ -d $client_source_dir ]]
     then
+        # check files in the current root directory only
         temp_file=$(find $client_source_dir -maxdepth 1)
         for f in $temp_file; do
             if [[ ! -d $f ]]
@@ -85,33 +87,44 @@ function FUNC_INSPECT_SOURCE_DIR {
                 dname=$(dirname $f)
                 fname=$(basename $f)
                 check_result=$(FUNC_SIZE_CHECKER $f)
-                if [[ ${check_result^^} == "TRUE" ]]
+                if [[ ${check_result^^} == "False" ]]
                 then
-                    echo -e "[i]: $f status is good."
+                    echo -e "[i]: $f is still transferring. Try back again."
+                    #Add to later
+                else
+                    echo -e "[i]: $f is ready to be transferred."
                     #or echo -e "[i]: $f $(echo $?)"
                     FUNC_TRANSFER_FILE $dname $fname
-                else
-                    echo -e "[i]: $f status is still changing. Try back again."
-                    #Add to later
                 fi
             fi
         done
-        temp_dir=$(find $client_source_dir -type d)
-        for f in $temp_dir; do
-            if [[ -d $f ]]
-            then
-                dname=$(dirname $f)
-                fname=$(basename $f)
-                check_result=$(FUNC_SIZE_CHECKER $f)
-                if [[ ${check_result^^} == "TRUE" ]]
+        # check files within level 2 subdirectories and only transfer if every files are ready within.
+        temp_dir=$(find $client_source_dir -mindepth 1 -maxdepth 1 -type d)
+        for d in $temp_dir; do
+            BOOL_GO_TRANSFER=true
+            temp_file=$(find $d )
+            for f in $temp_file; do
+                if [[ ! -d $f ]]
                 then
-                    echo -e "[i]: $f status is good."
-                    #or echo -e "[i]: $f $(echo $?)"
-                    FUNC_TRANSFER_FILE $dname $fname
-                else
-                    echo -e "[i]: $f status is still changing. Try back again."
-                    #Add to later
+                    check_result=$(FUNC_SIZE_CHECKER $f)
+                    if [[ ${check_result^^} == "FALSE" ]]
+                    then
+                        echo -e "[i]: $f is still transferring. Try back again."
+                        BOOL_GO_TRANSFER=false
+                        #Add to later
+                    else
+                        echo -e "[i]: $f is ready to be transferred."
+                        #or echo -e "[i]: $f $(echo $?)"
+                    fi
                 fi
+            done
+            dname=$(dirname $d)
+            fname=$(basename $d)
+            if [[ ${BOOL_GO_TRANSFER^^} == "FALSE" ]]
+            then
+                echo -e "[i]: Some files in $d is still transferring. Try back again."
+            else
+                FUNC_TRANSFER_FILE $d $fname
             fi
         done
     fi

@@ -1,3 +1,8 @@
+I use the below to test conditions with size checkers and the logics.
+
+dd if=/dev/zero of=~/lv1/lv1_file1 bs=1 count=1024444444
+dd if=/dev/zero of=~/lv1/lv2b/lv2b_file1 bs=1 count=10244444444
+
 [i]: Read Client config files	: template.conf.d/client1.conf
 [i]: ---------------------------------------------------------
 

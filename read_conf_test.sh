@@ -170,3 +170,23 @@ for f in $conf_list; do
     #done |sort -r
 done
 exit
+
+function FUNC_START_CLIENT_LOG_FILE {
+    local temp_log_filename=""
+    local PARAM_DATE_LOG=$(FUNC_GET_DATE)
+
+    client_log_filename=ARRAY_CLIENT_CONF[log_filename]
+    echo -e "...$client_log_filename..."
+    if [[ ! -n ${ARRAY_CLIENT_CONF[log_filename]} ]]
+    then
+        temp_log_filename="$FILE_APP_LOG_DIR/${ARRAY_CLIENT_CONF[client_name]}.$PARAM_DATE_LOG_LABEL.log"
+        $BIN_ECHO -e "[-i-]: $PARAM_DATE_LOG log_filename is not defined. Using $temp_log_filename."
+        exec 2>> $temp_log_filename  1>> $temp_log_filename
+    else
+        $BIN_ECHO -e "[-i-]: $PARAM_DATE_LOG ${ARRAY_CLIENT_CONF[log_filename]} is defined."
+        exec 2>> ${ARRAY_CLIENT_CONF[log_filename]}  1>> ${ARRAY_CLIENT_CONF[log_filename]}
+    fi
+    $BIN_ECHO -e "[-i-]: $PARAM_DATE_LOG $PARAM_LOGGING_HEADER"
+    return 0
+}
+

@@ -73,12 +73,12 @@ PARAM_AU_AUDIT_KEYWORD=au_audit
 PARAM_AU_AUDIT_EGREP_FILTER=
 
 #FILE_AU_AUDIT_CFG=
-FILE_AU_AUDIT_CFG=/usr/local/admin/au_audit_check.cfg
-FILE_AU_AUDIT_TMP=/usr/local/admin/au_audit_check.tmp
-FILE_AU_AUDIT_AUREPORT=/usr/local/admin/au_audit_check.aureport
-FILE_AU_AUDIT_RESULT_FILE=/usr/local/admin/au_audit_check.out
-FILE_AU_AUDIT_LOG=/usr/local/admin/au_audit_check.log
-FILE_AU_AUDIT_LOCK=/usr/local/admin/au_audit_check.lock
+FILE_AU_AUDIT_CFG=/home/adm/au_audit_check.cfg
+FILE_AU_AUDIT_TMP=/home/adm/au_audit_check.tmp
+FILE_AU_AUDIT_AUREPORT=/home/adm/au_audit_check.aureport
+FILE_AU_AUDIT_RESULT_FILE=/home/adm/au_audit_check.out
+FILE_AU_AUDIT_LOG=/home/adm/au_audit_check.log
+FILE_AU_AUDIT_LOCK=/home/adm/au_audit_check.lock
 
 BIN_AUDITCTL=/sbin/auditctl
 BIN_AUSEARCH=/sbin/ausearch

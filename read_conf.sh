@@ -1,5 +1,19 @@
 #!/bin/bash
-
+#################################################################################
+#                                                                               #
+# Program name . . . . . . . . . . . . . . :   scp_filesync.sh                  #
+# Program dependency . . . . . . . . . . . :   conf.d/*.confi                   #
+# Date         . . . . . . . . . . . . . . :   03/11/2018                       #
+#                                                                               #
+# It is running every 5 minutes via root crontab.                               #
+# The script will go through client sftp dropboxes and carry out checks for     #
+# completed files and move the completed file to another folder.                #
+#                                                                               #
+# Modification History                                                          #
+# 03/11/18 KT - First edition sc_filesync.sh.                                   #
+# 03/11/18 KT -                                                                 #
+#                                                                               #
+#################################################################################
 PARAM_CONF_LIST=$(ls template.conf.d/*)
 
 PARAM_SIZE_CHECKER_SLEEP_TIME=2;
@@ -38,6 +52,23 @@ PARAM_PARSE_FOOTER="--------------------------------- Parsing finishes ---------
 PARAM_LOGGING_HEADER="---------------------------------- Logging starts ----------------------------------"
 PARAM_LOGGING_FOOTER="--------------------------------- Logging finishes ----------------------------------"
 
+
+#########################################################################
+#                                                                       #
+# 0.) Check if previous job is running.                                 #
+#                                                                       #
+# If previous job flag file exist then exit gracecfully.                #
+#                                                                       #
+# If no previous job can be found, then prepare script environment for  #
+# tasks execution.                                                      #
+#                                                                       #
+#########################################################################
+function FUNC_CHECK_EXISTING_JOB {
+
+echo
+
+}
+
 ##################################
 #                                #
 # Generic size checker function. #
@@ -69,6 +100,20 @@ function FUNC_GET_DATE {
      $BIN_ECHO -e $PARAM_DATE_LOG
      return 0
 }
+
+#########################################################################
+#                                                                       #
+# 3.) Read script PARAM_CLIENT_CONF_AA file.                            #
+#                                                                       #
+# Read target path and clients folder and loop through each target's    #
+# path and its sub-folders path (client folders).                       #
+#                                                                       #
+# Compile list of files and export into a temp file which contain list  #
+# of files found for each client for later use.                         #
+#                                                                       #
+# Read conf and save content in global conf associate array.            #
+#                                                                       #
+#########################################################################
 ##################################################
 #                                                #
 # Generic read conf to associate array function. #
@@ -81,7 +126,7 @@ function FUNC_READ_CONF {
     do
       if  $BIN_ECHO $line|$BIN_GREP -F : &>/dev/null
       then
-            # Remove leading trailing whitespace.
+            # Remove leading and trailing whitespace.
             shopt -s extglob
             temp_attribute_name=$($BIN_ECHO $line |cut -d ':' -f 1)
             temp_attribute_name=${temp_attribute_name##+([[:space:]])}
@@ -96,13 +141,13 @@ function FUNC_READ_CONF {
             if [[ $client_attribute == "" ]]
             then
                 $BIN_ECHO -e "[-e-]: $PARAM_DATE_LOG Parameter $client_attribute_name is empty. Abort."
-                exit 1
+                exit
             fi
             if [[ ${client_attribute_name:0:1} =~ "#" ]]
             then
                 $BIN_ECHO -e "[-i-]: $PARAM_DATE_LOG Parameter $client_attribute_name has been commented out. Ignore line."
             else
-                $BIN_ECHO -e "[-i-]: $PARAM_DATE_LOG Read $client_attribute_name."
+                $BIN_ECHO -e "[-i-]: $PARAM_DATE_LOG Read $client_attribute_name. $client_attribute."
                 ARRAY_CLIENT_CONF[$client_attribute_name]=$client_attribute
             fi
       fi
@@ -111,9 +156,11 @@ function FUNC_READ_CONF {
     return
 }
 
-# Perform trict parameter checks with regex rules.
+# Perform strict parameter checks with regex rules.
 # This will ensure that parameters are clean.
 function FUNC_CHECK_PARAMS {
+    local PARAM_MISSING="FALSE"
+
     for client_attribute_name in  "${!ARRAY_CLIENT_CONF[@]}" ; do
         local PARAM_DATE_LOG=$(FUNC_GET_DATE)
         if [[ ${client_attribute_name^^} == "CLIENT_NAME" ]]
@@ -122,9 +169,8 @@ function FUNC_CHECK_PARAMS {
             then
                 $BIN_ECHO -e "[-i-]: $PARAM_DATE_LOG $client_attribute_name parameter exists"
             else
-                $BIN_ECHO -e "[-i-]: $PARAM_DATE_LOG $client_attribute_name parameter does not exists"
-                $BIN_ECHO -e "[-e-]: $PARAM_DATE_LOG Script Abort."
-                exit 1
+                $BIN_ECHO -e "[-e-]: $PARAM_DATE_LOG $client_attribute_name parameter does not exists."
+                PARAM_MISSING="true"
             fi
             continue
         fi
@@ -135,18 +181,16 @@ function FUNC_CHECK_PARAMS {
             then
                 $BIN_ECHO -e "[-i-]: $PARAM_DATE_LOG $client_attribute_name parameter exists"
             else
-                $BIN_ECHO -e "[-i-]: $PARAM_DATE_LOG $client_attribute_name parameter does not exists"
-                $BIN_ECHO -e "[-e-]: $PARAM_DATE_LOG Script Abort."
-                exit 1
+                $BIN_ECHO -e "[-e-]: $PARAM_DATE_LOG $client_attribute_name parameter does not exists."
+                PARAM_MISSING="true"
             fi
             #Check if user exist
             if [[ $(id ${ARRAY_CLIENT_CONF[$client_attribute_name]} > /dev/null 2>&1 ; $BIN_ECHO $?) == 0 ]]
             then
                 $BIN_ECHO -e "[-i-]: $PARAM_DATE_LOG local source user exists"
             else
-                $BIN_ECHO -e "[-i-]: $PARAM_DATE_LOG local source user does not exists"
-                $BIN_ECHO -e "[-e-]: $PARAM_DATE_LOG Script Abort."
-                exit 1
+                $BIN_ECHO -e "[-e-]: $PARAM_DATE_LOG local source user does not exists."
+                PARAM_MISSING="true"
             fi
             continue
         fi
@@ -157,9 +201,7 @@ function FUNC_CHECK_PARAMS {
             then
                 $BIN_ECHO -e "[-i-]: $PARAM_DATE_LOG $client_attribute_name file exists"
             else
-                $BIN_ECHO -e "[-i-]: $PARAM_DATE_LOG $client_attribute_name file does not exists"
-                $BIN_ECHO -e "[-e-]: $PARAM_DATE_LOG Script Abort."
-                exit 1
+                $BIN_ECHO -e "[-i-]: $PARAM_DATE_LOG $client_attribute_name file does not exists."
             fi
             continue
         fi
@@ -170,9 +212,8 @@ function FUNC_CHECK_PARAMS {
             then
                 $BIN_ECHO -e "[-i-]: $PARAM_DATE_LOG $client_attribute_name parameter exists"
             else
-                $BIN_ECHO -e "[-i-]: $PARAM_DATE_LOG $client_attribute_name parameter does not exists"
-                $BIN_ECHO -e "[-e-]: $PARAM_DATE_LOG Script Abort."
-                exit 1
+                $BIN_ECHO -e "[-e-]: $PARAM_DATE_LOG $client_attribute_name parameter does not exists."
+                PARAM_MISSING="true"
             fi
             continue
         fi
@@ -183,9 +224,8 @@ function FUNC_CHECK_PARAMS {
             then
                 $BIN_ECHO -e "[-i-]: $PARAM_DATE_LOG $client_attribute_name parameter exists"
             else
-                $BIN_ECHO -e "[-i-]: $PARAM_DATE_LOG $client_attribute_name parameter does not exists"
-                $BIN_ECHO -e "[-e-]: $PARAM_DATE_LOG Script Abort."
-                exit 1
+                $BIN_ECHO -e "[-e-]: $PARAM_DATE_LOG $client_attribute_name parameter does not exists."
+                PARAM_MISSING="true"
             fi
             continue
         fi
@@ -196,9 +236,8 @@ function FUNC_CHECK_PARAMS {
             then
                 $BIN_ECHO -e "[-i-]: $PARAM_DATE_LOG $client_attribute_name parameter exists"
             else
-                $BIN_ECHO -e "[-i-]: $PARAM_DATE_LOG $client_attribute_name parameter does not exists"
-                $BIN_ECHO -e "[-e-]: $PARAM_DATE_LOG Script Abort."
-                exit 1
+                $BIN_ECHO -e "[-e-]: $PARAM_DATE_LOG $client_attribute_name parameter does not exists."
+                PARAM_MISSING="true"
             fi
             continue
         fi
@@ -220,9 +259,8 @@ function FUNC_CHECK_PARAMS {
             then
                 $BIN_ECHO -e "[-i-]: $PARAM_DATE_LOG $client_attribute_name parameter exists"
             else
-                $BIN_ECHO -e "[-i-]: $PARAM_DATE_LOG $client_attribute_name parameter does not exists"
-                $BIN_ECHO -e "[-e-]: $PARAM_DATE_LOG Script Abort."
-                exit 1
+                $BIN_ECHO -e "[-e-]: $PARAM_DATE_LOG $client_attribute_name parameter does not exists."
+                PARAM_MISSING="true"
             fi
             continue
         fi
@@ -233,9 +271,8 @@ function FUNC_CHECK_PARAMS {
             then
                 $BIN_ECHO -e "[-i-]: $PARAM_DATE_LOG $client_attribute_name parameter exists"
             else
-                $BIN_ECHO -e "[-i-]: $PARAM_DATE_LOG $client_attribute_name parameter does not exists"
-                $BIN_ECHO -e "[-e-]: $PARAM_DATE_LOG Script Abort."
-                exit 1
+                $BIN_ECHO -e "[-e-]: $PARAM_DATE_LOG $client_attribute_name parameter does not exists."
+                PARAM_MISSING="true"
             fi
             continue
         fi
@@ -264,10 +301,20 @@ function FUNC_CHECK_PARAMS {
             continue
         fi
     #done |sort -r
-    done |sort
+    done
     return
+    # Must return 0. Anything other than 0 will end up with unexpected EOF error.
 }
 
+#########################################################################
+#                                                                       #
+# 5.) Perform file transfer.                                            #
+#                                                                       #
+# Loop through each file path from transfer list and transfer to target #
+# path. Upon each transfer completion, append transfer info to mail a   #
+# report and persistent transfer log.                                   #
+#                                                                       #
+#########################################################################
 function FUNC_TRANSFER_FILE {
     local PARAM_TARGET=$1
     local PARAM_TARGET_BASE_DIR=$(basename $1)
@@ -275,7 +322,7 @@ function FUNC_TRANSFER_FILE {
     local PARAM_DATE_LOG=$(FUNC_GET_DATE)
     if [[ -d $PARAM_TARGET ]]
     then
-        $BIN_ECHO -e "[-t-]: $PARAM_DATE_LOG └── Transfer ${ARRAY_CLIENT_CONF[source_dir]}/$PARAM_TARGET_BASE_DIR to ${ARRAY_CLIENT_CONF[destination_dir]}/"
+        $BIN_ECHO -e "[-t-]: $PARAM_DATE_LOG └── DTransfer ${ARRAY_CLIENT_CONF[source_dir]}/$PARAM_TARGET_BASE_DIR to ${ARRAY_CLIENT_CONF[destination_dir]}/"
         if [[ $($BIN_ECHO $?) == 1 ]]
         then
           $BIN_ECHO -e "[-e-]: $PARAM_DATE_LOG Something went wrong during transfer."
@@ -285,7 +332,7 @@ function FUNC_TRANSFER_FILE {
     fi
     if [[ -f $PARAM_TARGET ]]
     then
-        $BIN_ECHO -e "[-t-]: $PARAM_DATE_LOG └── Transfer ${ARRAY_CLIENT_CONF[source_dir]}/$PARAM_TARGET_BASE_FILE to ${ARRAY_CLIENT_CONF[destination_dir]}/"
+        $BIN_ECHO -e "[-t-]: $PARAM_DATE_LOG └── FTransfer ${ARRAY_CLIENT_CONF[source_dir]}/$PARAM_TARGET_BASE_FILE to ${ARRAY_CLIENT_CONF[destination_dir]}/"
         if [[ $($BIN_ECHO $?) == 1 ]]
         then
           $BIN_ECHO -e "[-e-]: $PARAM_DATE_LOG Something went wrong during transfer."
@@ -296,7 +343,18 @@ function FUNC_TRANSFER_FILE {
     $BIN_ECHO -e "[-e-]: $PARAM_DATE_LOG Target is neither file or directory. Nothing is transferred."
     return 1
 }
-
+#########################################################################
+#                                                                       #
+# 4.) Perform file state checks.                                        #
+#                                                                       #
+# Loop through each file from temporary list and check its file state.  #
+#                                                                       #
+# If we detect a file size change on a file, then do nothing.           #
+# (Do not add file path to transfer list. )                             #
+#                                                                       #
+# If we do not detect file size change, add file path to transfer list. #
+#                                                                       #
+#########################################################################
 function FUNC_INSPECT_SOURCE_DIR {
 
     #$BIN_ECHO -e "${ARRAY_CLIENT_CONF[@]}."
@@ -374,15 +432,39 @@ function FUNC_START_CLIENT_LOG_FILE {
     return 0
 }
 
+
+#########################################################################
+#                                                                       #
+# 6.) Mail transfer report.                                             #
+# Send transfer report to Admin.                                        #
+#                                                                       #
+#########################################################################
+
+
+
+
+
+
+
+
+
+function FUNC_ABORT_SCRIPT {
+    set -x
+    break
+    local PARAM_DATE_LOG=$(FUNC_GET_DATE)
+    $BIN_ECHO -e "[-e-]: $PARAM_DATE_LOG Abort script."
+    exec >/dev/tty
+    exit 1
+}
 ##################
 #                #
 # Error logging. #
 #                #
 ##################
-set -e
 set -o errtrace
 set -o errexit
-
+set -e
+trap '$BIN_ECHO -e "[-e-]: "Error on $FUNCNAME."' ERR
 #####################################################
 #                                                   #
 # Disable pipefail to prevent egrep from breaking.  #
@@ -408,7 +490,25 @@ function FUNC_STOP_CLIENT_LOG_FILE {
     #exec >/dev/tty
     return 0
 }
-
+#########################################################################
+#                                                                       #
+# Main body.                                                            #
+# ----------                                                            #
+# Ensure all parameters are ok before proceding.                        #
+# Perform audit log examinations.                                       #
+# 1.) Set default settings.                                             #
+# 2.) Setup functions.                                                  #
+# 3.) Read script client config files.                                  #
+# 4.) Perform file state checks.                                        #
+# 5.) Perform file transfer.                                            #
+# 6.) Mail transfer report.                                             #
+#                                                                       #
+#########################################################################
+#########################################################################
+#                                                                       #
+# 3.) Loop through each config file via function FUNC_READ_CONF, and    #
+#                                                                       #
+#########################################################################
 #########################################################################
 #                                                                       #
 # 2.) Loop through each config file via function FUNC_READ_CONF, and    #
@@ -420,7 +520,8 @@ for f in $PARAM_CONF_LIST; do
     $BIN_ECHO -e "\n[-i-]: $PARAM_DATE_LOG Read Client config files\t: $f"
     $BIN_ECHO -e "[-i-]: $PARAM_DATE_LOG $PARAM_PARSE_HEADER"
     FUNC_READ_CONF $f
-    FUNC_CHECK_PARAMS $f
+    # FUNC_CHECK_PARAMS is Pointless as it can't abort.
+    #FUNC_CHECK_PARAMS $f
     FUNC_START_CLIENT_LOG_FILE $f
     FUNC_INSPECT_SOURCE_DIR $f
     FUNC_STOP_CLIENT_LOG_FILE $f

@@ -1,20 +1,22 @@
 #!/bin/bash
 
 #set -x
-typeset -A PARAM_CLIENT_CONF_AA
+typeset -A ARRAY_CLIENT_CONF
 PARAM_CONF_LIST=$(ls template.conf.d/*)
 
 PARAM_SIZE_CHECKER_SLEEP_TIME=2;
 
 
 BIN_ECHO=/bin/echo;
+BIN_SLEEP=/bin/sleep;
+BIN_GREP=/bin/grep;
 
 function FUNC_SIZE_CHECKER
 {
 
-    #echo -e "[+]: $1"
+    #$BIN_ECHO -e "[+]: $1"
     local TGT_F_BF=$(stat -c %s $1)
-    sleep $PARAM_SIZE_CHECKER_SLEEP_TIME
+    $BIN_SLEEP $PARAM_SIZE_CHECKER_SLEEP_TIME
     local TGT_F_AF=$(stat -c %s $1)
 
     if [ "$TGT_F_BF" -eq "$TGT_F_AF" ]; then
@@ -34,26 +36,26 @@ function FUNC_SIZE_CHECKER
 ########################################################################
 function FUNC_READ_CONF {
     local PARAM_FUNC_READ_FILE=$1
-    #echo "[i]:"$_func_param_f
+    #$BIN_ECHO "[-i-]:"$_func_param_f
     while read line
     do
-      if  echo $line|grep -F : &>/dev/null
+      if  $BIN_ECHO $line|$BIN_GREP -F : &>/dev/null
       then
             # Remove leading trailing whitespace.
             shopt -s extglob
-            temp_attribute_name=$(echo $line |cut -d ':' -f 1)
+            temp_attribute_name=$($BIN_ECHO $line |cut -d ':' -f 1)
             temp_attribute_name=${temp_attribute_name##+([[:space:]])}
             client_attribute_name=${temp_attribute_name%%+([[:space:]])}
-            temp_attribute=$(echo $line |cut -d ':' -f 2-)
+            temp_attribute=$($BIN_ECHO $line |cut -d ':' -f 2-)
             temp_attribute=${temp_attribute##+([[:space:]])}
             client_attribute=${temp_attribute%%+([[:space:]])}
             #temp_attribute="${line//[[:space:]]/}"
             if [[ $temp_attribute == "" ]]
             then
-                echo -e "Parameter $temp_attribute_name is empty. Abort."
+                $BIN_ECHO -e "[-e-]: Parameter $temp_attribute_name is empty. Abort."
                 exit 1
             else
-                PARAM_CLIENT_CONF_AA[$client_attribute_name]=$client_attribute
+                ARRAY_CLIENT_CONF[$client_attribute_name]=$client_attribute
             fi
       fi
     done < $PARAM_FUNC_READ_FILE
@@ -62,21 +64,42 @@ function FUNC_READ_CONF {
 }
 
 function FUNC_TRANSFER_FILE {
-    local param_target_dir=$1
-    local param_target_base_dir=$(basename $1)
-    local param_target_file=$2
-    #echo -e "[T]: └── Transfer $param_target_file from ${PARAM_CLIENT_CONF_AA[source_dir]} to ${PARAM_CLIENT_CONF_AA[destination_dir]}"
-    #echo -e "[T]: └── Transfer $param_target_file from $param_target_dir to ${PARAM_CLIENT_CONF_AA[destination_dir]}/$param_target_base_dir"
-    echo -e "[T]: └── Transfer $param_target_file from $param_target_dir to ${PARAM_CLIENT_CONF_AA[destination_dir]}/$param_target_base_dir"
-    return 0
+    local PARAM_TARGET=$1
+    local PARAM_TARGET_BASE_DIR=$(basename $1)
+    local PARAM_TARGET_BASE_FILE=$(basename $1)
+    $BIN_ECHO -e "---"
+    if [[ -d $PARAM_TARGET ]]
+    then
+        $BIN_ECHO -e "[-t-]: └── Transfer ${ARRAY_CLIENT_CONF[source_dir]}/$PARAM_TARGET_BASE_DIR to ${ARRAY_CLIENT_CONF[destination_dir]}/"
+        if [[ $($BIN_ECHO $?) == 1 ]]
+        then
+          $BIN_ECHO -e "[-e-]: Something went wrong during transfer."
+          return 1
+        fi
+        $BIN_ECHO -e "---"
+        return 0
+    fi
+    if [[ -f $PARAM_TARGET ]]
+    then
+        $BIN_ECHO -e "[-t-]: └── Transfer ${ARRAY_CLIENT_CONF[source_dir]}/$PARAM_TARGET_BASE_FILE to ${ARRAY_CLIENT_CONF[destination_dir]}/"
+        if [[ $($BIN_ECHO $?) == 1 ]]
+        then
+          $BIN_ECHO -e "[-e-]Something went wrong during transfer."
+          return 1
+        fi
+        $BIN_ECHO -e "---"
+        return 0
+    fi
+    $BIN_ECHO -e "[-e-]: Target is neither file or directory. Nothing is transferred."
+    return 1
 }
 function FUNC_INSPECT_SOURCE_DIR {
 
-#echo -e "${PARAM_CLIENT_CONF_AA[@]}."
-#echo -e "${!PARAM_CLIENT_CONF_AA[@]}."
-#echo -e "[i]: ${PARAM_CLIENT_CONF_AA[source_dir]}."
+#$BIN_ECHO -e "${ARRAY_CLIENT_CONF[@]}."
+#$BIN_ECHO -e "${!ARRAY_CLIENT_CONF[@]}."
+#$BIN_ECHO -e "[-i-]: ${ARRAY_CLIENT_CONF[source_dir]}."
     #if source_dir exists, list the directory
-    client_source_dir=${PARAM_CLIENT_CONF_AA[source_dir]}
+    client_source_dir=${ARRAY_CLIENT_CONF[source_dir]}
     if [[ -d $client_source_dir ]]
     then
         # check files in the current root directory only
@@ -84,17 +107,15 @@ function FUNC_INSPECT_SOURCE_DIR {
         for f in $temp_file; do
             if [[ ! -d $f ]]
             then
-                dname=$(dirname $f)
-                fname=$(basename $f)
                 check_result=$(FUNC_SIZE_CHECKER $f)
                 if [[ ${check_result^^} == "FALSE" ]]
                 then
-                    echo -e "[i]: $f is still transferring. Try back again."
+                    $BIN_ECHO -e "[-i-]: $f is still transferring. Try back again."
                     #Add to later
                 else
-                    echo -e "[i]: $f is ready to be transferred."
-                    #or echo -e "[i]: $f $(echo $?)"
-                    FUNC_TRANSFER_FILE $dname $fname
+                    $BIN_ECHO -e "[-i-]: $f is ready to be transferred."
+                    #or $BIN_ECHO -e "[-i-]: $f $($BIN_ECHO $?)"
+                    FUNC_TRANSFER_FILE $f
                 fi
             fi
         done
@@ -109,22 +130,20 @@ function FUNC_INSPECT_SOURCE_DIR {
                     check_result=$(FUNC_SIZE_CHECKER $f)
                     if [[ ${check_result^^} == "FALSE" ]]
                     then
-                        echo -e "[i]: $f is still transferring. Try back again."
+                        $BIN_ECHO -e "[-i-]: $f is still transferring. Try back again."
                         BOOL_GO_TRANSFER=false
                         #Add to later
                     else
-                        echo -e "[i]: $f is ready to be transferred."
-                        #or echo -e "[i]: $f $(echo $?)"
+                        $BIN_ECHO -e "[-i-]: $f is ready to be transferred."
+                        #or $BIN_ECHO -e "[-i-]: $f $($BIN_ECHO $?)"
                     fi
                 fi
             done
-            dname=$(dirname $d)
-            fname=$(basename $d)
             if [[ ${BOOL_GO_TRANSFER^^} == "FALSE" ]]
             then
-                echo -e "[i]: Some file(s) in $d are still transferring. Try back again."
+                $BIN_ECHO -e "[-i-]: Some file(s) in $d are still transferring. Try back again."
             else
-                FUNC_TRANSFER_FILE $d $fname
+                FUNC_TRANSFER_FILE $d
             fi
         done
     fi
@@ -141,12 +160,12 @@ function FUNC_INSPECT_SOURCE_DIR {
 #                                                                       #
 ########################################################################
 for f in $PARAM_CONF_LIST; do
-    echo -e "\n[i]: Read Client config files\t: $f"
-    echo "[i]: ---------------------------------------------------------"
+    $BIN_ECHO -e "\n[-i-]: Read Client config files\t: $f"
+    $BIN_ECHO "[-i-]: ---------------------------------------------------------"
     FUNC_READ_CONF $f
     FUNC_INSPECT_SOURCE_DIR $f
-    #for key in  "${!PARAM_CLIENT_CONF_AA[@]}" ; do
-    #    echo -e "[i]: $key\t: ${PARAM_CLIENT_CONF_AA[$key]}"
+    #for key in  "${!ARRAY_CLIENT_CONF[@]}" ; do
+    #    $BIN_ECHO -e "[-i-]: $key\t: ${ARRAY_CLIENT_CONF[$key]}"
     #done |sort -r
 done
 exit

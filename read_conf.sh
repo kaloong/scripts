@@ -10,9 +10,17 @@ PARAM_SIZE_CHECKER_SLEEP_TIME=2;
 BIN_ECHO=/bin/echo;
 BIN_SLEEP=/bin/sleep;
 BIN_GREP=/bin/grep;
+BIN_MKDIR=/bin/mkdir;
+$BIN_MKDIR -p $(dirname $0)/logs
+FILE_APP_LOG=$(dirname $0)/logs/$(basename $0).log
 
-function FUNC_SIZE_CHECKER
-{
+
+##################################
+#                                #
+# Generic size checker function. #
+#                                #
+##################################
+function FUNC_SIZE_CHECKER {
 
     #$BIN_ECHO -e "[+]: $1"
     local TGT_F_BF=$(stat -c %s $1)
@@ -29,11 +37,11 @@ function FUNC_SIZE_CHECKER
 }
 
 
-#########################################################################
-#                                                                       #
-# 2.) Read conf and save content in global conf associate array.        #
-#                                                                       #
-########################################################################
+##################################################
+#                                                #
+# Generic read conf to associate array function. #
+#                                                #
+##################################################
 function FUNC_READ_CONF {
     local PARAM_FUNC_READ_FILE=$1
     #$BIN_ECHO "[-i-]:"$_func_param_f
@@ -50,11 +58,16 @@ function FUNC_READ_CONF {
             temp_attribute=${temp_attribute##+([[:space:]])}
             client_attribute=${temp_attribute%%+([[:space:]])}
             #temp_attribute="${line//[[:space:]]/}"
-            if [[ $temp_attribute == "" ]]
+            if [[ $client_attribute == "" ]]
             then
-                $BIN_ECHO -e "[-e-]: Parameter $temp_attribute_name is empty. Abort."
+                $BIN_ECHO -e "[-e-]: Parameter $client_attribute_name is empty. Abort."
                 exit 1
+            fi
+            if [[ ${client_attribute_name:0:1} =~ "#" ]]
+            then
+                $BIN_ECHO -e "[-i-]: Parameter $client_attribute_name has been commented out. Ignore line."
             else
+                $BIN_ECHO -e "[-i-]: Read $client_attribute_name."
                 ARRAY_CLIENT_CONF[$client_attribute_name]=$client_attribute
             fi
       fi
@@ -150,6 +163,18 @@ function FUNC_INSPECT_SOURCE_DIR {
     return 0
 }
 
+exec 2> $FILE_APP_LOG 1> $FILE_APP_LOG
+function FUNC_START_CLIENT_LOG_FILE {
+    exec 2> ${ARRAY_CLIENT_CONF[log_filename]}  1> ${ARRAY_CLIENT_CONF[log_filename]}
+    return 0
+}
+
+function FUNC_STOP_CLIENT_LOG_FILE {
+    exec 2>> $FILE_APP_LOG 1>> $FILE_APP_LOG
+    #exec >/dev/tty
+    return 0
+}
+
 #for f in $PARAM_CONF_LIST; do
 #        FUNC_READ_CONF $f
 #done #done for
@@ -161,9 +186,12 @@ function FUNC_INSPECT_SOURCE_DIR {
 ########################################################################
 for f in $PARAM_CONF_LIST; do
     $BIN_ECHO -e "\n[-i-]: Read Client config files\t: $f"
-    $BIN_ECHO "[-i-]: ---------------------------------------------------------"
+    $BIN_ECHO "[-i-]: ------------------------START---------------------------------"
     FUNC_READ_CONF $f
+    FUNC_START_CLIENT_LOG_FILE $f
     FUNC_INSPECT_SOURCE_DIR $f
+    FUNC_STOP_CLIENT_LOG_FILE $f
+    $BIN_ECHO "[-i-]: -------------------------END----------------------------------"
     #for key in  "${!ARRAY_CLIENT_CONF[@]}" ; do
     #    $BIN_ECHO -e "[-i-]: $key\t: ${ARRAY_CLIENT_CONF[$key]}"
     #done |sort -r

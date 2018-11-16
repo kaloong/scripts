@@ -1,0 +1,12 @@
+[-i-]: 2018-11-14 23:24:08 ---------------------------------- Logging starts ----------------------------------
+[-i-]: 2018-11-14 23:24:08 /home/mensa/lv0/lv3/lv3_file1 is ready to be transferred.
+[-t-]: 2018-11-14 23:24:10 └── FTransfer /home/mensa/lv0/lv3/lv3_file1 to /home/mensa/lv6/
+[-i-]: 2018-11-14 23:24:10 /home/mensa/lv0/lv3/lv3_file2 is ready to be transferred.
+[-t-]: 2018-11-14 23:24:12 └── FTransfer /home/mensa/lv0/lv3/lv3_file2 to /home/mensa/lv6/
+[-i-]: 2018-11-14 23:24:12 /home/mensa/lv0/lv3/lv3b/lv3b_file1 is ready to be transferred.
+[-i-]: 2018-11-14 23:24:14 /home/mensa/lv0/lv3/lv3b/lv3b_file2 is ready to be transferred.
+[-t-]: 2018-11-14 23:24:16 └── DTransfer /home/mensa/lv0/lv3/lv3b to /home/mensa/lv6/
+[-i-]: 2018-11-14 23:24:16 /home/mensa/lv0/lv3/lv3a/lv3a_file2 is ready to be transferred.
+[-i-]: 2018-11-14 23:24:18 /home/mensa/lv0/lv3/lv3a/lv3a_file1 is ready to be transferred.
+[-t-]: 2018-11-14 23:24:20 └── DTransfer /home/mensa/lv0/lv3/lv3a to /home/mensa/lv6/
+[-i-]: 2018-11-14 23:24:20 --------------------------------- Logging finishes ----------------------------------

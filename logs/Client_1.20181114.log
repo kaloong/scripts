@@ -1,0 +1,6 @@
+[-i-]: 2018-11-14 23:23:55 ---------------------------------- Logging starts ----------------------------------
+[-i-]: 2018-11-14 23:23:55 /home/mensa/lv0/lv1/lv1_file2 is ready to be transferred.
+[-t-]: 2018-11-14 23:23:57 └── FTransfer /home/mensa/lv0/lv1/lv1_file2 to /home/mensa/lv6/
+[-i-]: 2018-11-14 23:23:57 /home/mensa/lv0/lv1/lv1_file1 is ready to be transferred.
+[-t-]: 2018-11-14 23:23:59 └── FTransfer /home/mensa/lv0/lv1/lv1_file1 to /home/mensa/lv6/
+[-i-]: 2018-11-14 23:23:59 --------------------------------- Logging finishes ----------------------------------

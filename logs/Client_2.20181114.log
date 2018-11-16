@@ -1,0 +1,8 @@
+[-i-]: 2018-11-14 23:24:00 ---------------------------------- Logging starts ----------------------------------
+[-i-]: 2018-11-14 23:24:00 /home/mensa/lv0/lv2/lv2b/lv2b_file1 is ready to be transferred.
+[-i-]: 2018-11-14 23:24:02 /home/mensa/lv0/lv2/lv2b/lv2b_file2 is ready to be transferred.
+[-t-]: 2018-11-14 23:24:04 └── DTransfer /home/mensa/lv0/lv2/lv2b to /home/mensa/lv6/
+[-i-]: 2018-11-14 23:24:04 /home/mensa/lv0/lv2/lv2a/lv2a_file1 is ready to be transferred.
+[-i-]: 2018-11-14 23:24:06 /home/mensa/lv0/lv2/lv2a/lv2a_file2 is ready to be transferred.
+[-t-]: 2018-11-14 23:24:08 └── DTransfer /home/mensa/lv0/lv2/lv2a to /home/mensa/lv6/
+[-i-]: 2018-11-14 23:24:08 --------------------------------- Logging finishes ----------------------------------

@@ -527,7 +527,7 @@ for f in $PARAM_CONF_LIST; do
     FUNC_STOP_CLIENT_LOG_FILE $f
     PARAM_DATE_LOG=$(FUNC_GET_DATE)
     $BIN_ECHO -e "[-i-]: $PARAM_DATE_LOG $PARAM_PARSE_FOOTER"
-    unset ARRAY_CLIENT_CONF
+    unset -v ARRAY_CLIENT_CONF
     #for key in  "${!ARRAY_CLIENT_CONF[@]}" ; do
     #    $BIN_ECHO -e "[-i-]: $key\t: ${ARRAY_CLIENT_CONF[$key]}"
     #done |sort -r

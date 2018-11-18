@@ -14,8 +14,26 @@
 # 03/11/18 KT -                                                                 #
 #                                                                               #
 #################################################################################
-PARAM_CONF_LIST=$(ls template.conf.d/*.conf)
 
+#######################################################
+#                                                     #
+# Default settings.                                   #
+#                                                     #
+#######################################################
+BIN_ECHO=/bin/echo
+BIN_TOUCH=/bin/touch
+BIN_RM=/bin/rm
+BIN_SLEEP=/bin/sleep
+BIN_MKDIR=/bin/mkdir
+if [[ $(grep redhat /etc/issue) =~ "Redhat" ]]; then
+    BIN_MAILX=/bin/mailx
+else
+    BIN_MAILX=/usr/bin/mailx
+fi
+BIN_DIRNAME=/usr/bin/dirname
+BIN_BASENAME=/usr/bin/basename
+
+PARAM_CONF_LIST=$(ls template.conf.d/*.conf)
 PARAM_SIZE_CHECKER_SLEEP_TIME=2;
 PARAM_DATE_LOG="$(date '+%Y-%m-%d %H:%M:%S')"
 PARAM_DATE_LOG_LABEL="$(date '+%Y%m%d')"
@@ -23,19 +41,10 @@ PARAM_DATE_LOG_LABEL="$(date '+%Y%m%d')"
 PARAM_MAIL_SUBJECT="--- TRANSFER REPORT ---"
 PARAM_MAIL_STATUS="UNKNOWN"
 PARAM_MAIL_LIST=""
-
-BIN_ECHO=/bin/echo
-BIN_TOUCH=/bin/touch
-BIN_RM=/bin/rm
-BIN_SLEEP=/bin/sleep
-BIN_MKDIR=/bin/mkdir
-#BIN_MAILX=/bin/mailx
-BIN_MAILX=/usr/bin/mailx
-BIN_DIRNAME=/usr/bin/dirname
-BIN_BASENAME=/usr/bin/basename
-
-$BIN_MKDIR -p $($BIN_DIRNAME $0)/logs
-
+PARAM_PARSE_HEADER="---------------------------------- Parsing starts ----------------------------------"
+PARAM_PARSE_FOOTER="--------------------------------- Parsing finishes ----------------------------------"
+PARAM_LOGGING_HEADER="---------------------------------- Logging starts ----------------------------------"
+PARAM_LOGGING_FOOTER="--------------------------------- Logging finishes ----------------------------------"
 
 FILE_LOCKFILE=/tmp/read_conf.lock
 FILE_SCRIPT_LOG_DIR=$($BIN_DIRNAME $0)/logs
@@ -43,25 +52,10 @@ FILE_SCRIPT_LOG=$FILE_SCRIPT_LOG_DIR/$($BIN_BASENAME $0).$PARAM_DATE_LOG_LABEL.l
 
 BOOL_BINARY_CHECK="FALSE"
 
-#######################################################
-#                                                     #
-# Default settings.                                   #
-#                                                     #
-#######################################################
-
-PARAM_CLIENT_MAIL_LIST="kaloong@localhost"
-PARAM_CLIENT_MAIL_STATUS="UNKNOWN"
-PARAM_CLIENT_ACCESS_NOT_FOUND="--- No anomalous access found ---"
-PARAM_CLIENT_MAIL_HOSTNAME="$(/bin/hostname)"
-PARAM_CLIENT_MAIL_SUBJECT="$PARAM_CLIENT_MAIL_HOSTNAME Transfer report check:"
-PARAM_CLIENT_MAIL_HEADER="--- $PARAM_CLIENT_MAIL_HOSTNAME: Transfer report $PARAM_DATE_LOG --- "
-PARAM_CLIENT_MAIL_FOOTER="--- $PARAM_CLIENT_MAIL_HOSTNAME: Transfer report $PARAM_DATE_LOG ---"
-
-PARAM_PARSE_HEADER="---------------------------------- Parsing starts ----------------------------------"
-PARAM_PARSE_FOOTER="--------------------------------- Parsing finishes ----------------------------------"
-PARAM_LOGGING_HEADER="---------------------------------- Logging starts ----------------------------------"
-PARAM_LOGGING_FOOTER="--------------------------------- Logging finishes ----------------------------------"
-
+if [[ ! -d "$FILE_SCRIPT_LOG_DIR" ]]
+then
+    $BIN_MKDIR -p $FILE_SCRIPT_LOG_DIR
+fi
 
 #########################################################################
 #                                                                       #
@@ -179,7 +173,8 @@ function FUNC_READ_CONF {
             fi
             if [[ ${client_attribute_name:0:1} =~ "#" || ${client_attribute_name:0:1} =~ " "  ]]
             then
-                $BIN_ECHO -e "[info:] $PARAM_DATE_LOG Parameter $client_attribute_name has been commented out. Ignore line."
+                #$BIN_ECHO -e "[info:] $PARAM_DATE_LOG Parameter $client_attribute_name has been commented out. Ignore line."
+                continue
             else
                 $BIN_ECHO -e "[info:] $PARAM_DATE_LOG Read $client_attribute_name. $client_attribute_value."
                 ARRAY_CLIENT_CONF[$client_attribute_name]=$client_attribute_value
@@ -381,11 +376,16 @@ function FUNC_SHOW_CMD_HELP {
 	# different options, in order to run the facility on an ad hoc bases. #
 	#                                                                     #
 	#######################################################################
-	$BIN_ECHO -e "\nUsage:"
-	$BIN_ECHO -e "------"
-	$BIN_ECHO -e "Flags available are:"
-	$BIN_ECHO -e "-f or --conf to config file. If not specify, ./conf.d/*.conf will be read."
-	$BIN_ECHO -e "------"
+	$BIN_ECHO -e """
+	\nUsage:\n
+    Flags available are:
+    ------
+    -h or --help to show this help screen.
+    ------
+    -c or --conf to specify configuration file. If not specify, ./conf.d/*.conf will be read.
+    If wildcard is used, ensure to enclose conf path with double quote like so:
+    \n this_script.sh -c \"conf.d/*/*.conf\".\n
+    """
 	return 0
 }
 
@@ -445,17 +445,17 @@ function FUNC_REMOVE_LOCKFILE {
 #                                                                       #
 #########################################################################
 for i in "$@"; do
-	case $i in
+	case "$1" in
 		-h|--help)
 		  exec &> /dev/tty
 		  $BIN_ECHO "[info:] Option Help triggered" >&2
 		  FUNC_SHOW_CMD_HELP
 		  exit 0
 		  ;;
-		-c=*|--conf=*)
-		  PARAM_CLIENT_CONF="${i#*=}"
-		  $BIN_ECHO -e "[info:] PARAM_CLIENT_CONF: $PARAM_CLIENT_CONF"
-		  shift
+		-c|--conf)
+		  PARAM_CONF_LIST="$2"
+		  $BIN_ECHO -e "[info:] $PARAM_DATE_LOG PARAM_CONF_LIST: $PARAM_CONF_LIST"
+		  break
 		  ;;
 		*)
 		  exec &> /dev/tty
@@ -467,46 +467,26 @@ done
 
 #########################################################################
 #                                                                       #
-# 2.) If -c flag not specified, loop throught each config via function  #
-#     function FUNC_READ_CONF.                                          #
+# Main body, loop throught target config files or directory.            #
+# like so: this_script.sh -c "conf.d/*/*.conf".                         #
 #                                                                       #
 ########################################################################
-if [[ ! -n $PARAM_CLIENT_CONF ]]
-then
-    FUNC_CHECK_LOCKFILE
-    FUNC_PARAM_CHECKS
-    for f in $PARAM_CONF_LIST; do
-        PARAM_DATE_LOG=$(FUNC_GET_DATE)
-        typeset -A ARRAY_CLIENT_CONF
-        $BIN_ECHO -e "\n[info:] $PARAM_DATE_LOG Read Client config files\t: $f"
-        $BIN_ECHO -e "[info:] $PARAM_DATE_LOG $PARAM_PARSE_HEADER"
-        FUNC_READ_CONF $f
-
-        FUNC_START_CLIENT_LOG_FILE $f
-        FUNC_INSPECT_SOURCE_DIR $f
-        FUNC_STOP_CLIENT_LOG_FILE $f
-        FUNC_MAIL_TRANSFER_LOG $PARAM_CLIENT_CONF
-        PARAM_DATE_LOG=$(FUNC_GET_DATE)
-        $BIN_ECHO -e "[info:] $PARAM_DATE_LOG $PARAM_PARSE_FOOTER"
-        unset -v ARRAY_CLIENT_CONF
-    done
-    FUNC_REMOVE_LOCKFILE
-else
+FUNC_CHECK_LOCKFILE
+FUNC_PARAM_CHECKS
+for f in $PARAM_CONF_LIST; do
     PARAM_DATE_LOG=$(FUNC_GET_DATE)
     typeset -A ARRAY_CLIENT_CONF
-    $BIN_ECHO -e "[info:] $PARAM_DATE_LOG Read Client config files\t: $PARAM_CLIENT_CONF"
+    $BIN_ECHO -e "\n[info:] $PARAM_DATE_LOG Read Client config files\t: $f"
     $BIN_ECHO -e "[info:] $PARAM_DATE_LOG $PARAM_PARSE_HEADER"
-    FUNC_PARAM_CHECKS
-    FUNC_CHECK_LOCKFILE
-    FUNC_READ_CONF $PARAM_CLIENT_CONF
-    FUNC_START_CLIENT_LOG_FILE $PARAM_CLIENT_CONF
-    FUNC_INSPECT_SOURCE_DIR $PARAM_CLIENT_CONF
-    FUNC_STOP_CLIENT_LOG_FILE $PARAM_CLIENT_CONF
+    FUNC_READ_CONF $f
+
+    FUNC_START_CLIENT_LOG_FILE $f
+    FUNC_INSPECT_SOURCE_DIR $f
+    FUNC_STOP_CLIENT_LOG_FILE $f
     FUNC_MAIL_TRANSFER_LOG $PARAM_CLIENT_CONF
     PARAM_DATE_LOG=$(FUNC_GET_DATE)
     $BIN_ECHO -e "[info:] $PARAM_DATE_LOG $PARAM_PARSE_FOOTER"
     unset -v ARRAY_CLIENT_CONF
-
-    FUNC_REMOVE_LOCKFILE
-fi
+done
+FUNC_REMOVE_LOCKFILE
 exit 0

@@ -222,6 +222,7 @@ function FUNC_TRANSFER_FILE {
     if [[ -d $PARAM_TARGET ]]
     then
         $BIN_ECHO -e "[xfer:] $PARAM_DATE_LOG └── DTransfer ${ARRAY_CLIENT_CONF[source_dir]}/$PARAM_TARGET_BASE_DIR to ${ARRAY_CLIENT_CONF[destination_dir]}/"
+        # scp directory within root
         if [[ $($BIN_ECHO $?) == 1 ]]
         then
             $BIN_ECHO -e "[err :] $PARAM_DATE_LOG Something went wrong during transfer."
@@ -234,6 +235,7 @@ function FUNC_TRANSFER_FILE {
     if [[ -f $PARAM_TARGET ]]
     then
         $BIN_ECHO -e "[xfer:] $PARAM_DATE_LOG └── FTransfer ${ARRAY_CLIENT_CONF[source_dir]}/$PARAM_TARGET_BASE_FILE to ${ARRAY_CLIENT_CONF[destination_dir]}/"
+        # scp files
         if [[ $($BIN_ECHO $?) == 1 ]]
         then
             $BIN_ECHO -e "[err :] $PARAM_DATE_LOG Something went wrong during transfer."
@@ -494,7 +496,7 @@ FUNC_PARAM_CHECKS
 for f in $PARAM_CONF_LIST; do
     PARAM_DATE_LOG=$(FUNC_GET_DATE)
     typeset -A ARRAY_CLIENT_CONF
-    $BIN_ECHO -e "\n[info:] $PARAM_DATE_LOG Read Client config files\t: $f"
+    $BIN_ECHO -e "[info:] $PARAM_DATE_LOG Read Client config files\t: $f"
     $BIN_ECHO -e "[info:] $PARAM_DATE_LOG $PARAM_PARSE_HEADER"
     FUNC_READ_CONF $f
     if [[ ${BOOL_CONFIG_CHECK^^} =~ "TRUE" ]]

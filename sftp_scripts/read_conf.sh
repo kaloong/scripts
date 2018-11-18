@@ -29,18 +29,20 @@ BIN_ECHO=/bin/echo
 BIN_TOUCH=/bin/touch
 BIN_RM=/bin/rm
 BIN_SLEEP=/bin/sleep
-BIN_GREP=/bin/grep
 BIN_MKDIR=/bin/mkdir
-BIN_MAILX=/bin/mailx
+#BIN_MAILX=/bin/mailx
+BIN_MAILX=/usr/bin/mailx
+BIN_DIRNAME=/usr/bin/dirname
+BIN_BASENAME=/usr/bin/basename
 
-
-$BIN_MKDIR -p $(dirname $0)/logs
+$BIN_MKDIR -p $($BIN_DIRNAME $0)/logs
 
 
 FILE_LOCKFILE=/tmp/read_conf.lock
-FILE_SCRIPT_LOG_DIR=$(dirname $0)/logs
-FILE_SCRIPT_LOG=$FILE_SCRIPT_LOG_DIR/$(basename $0).$PARAM_DATE_LOG_LABEL.log
+FILE_SCRIPT_LOG_DIR=$($BIN_DIRNAME $0)/logs
+FILE_SCRIPT_LOG=$FILE_SCRIPT_LOG_DIR/$($BIN_BASENAME $0).$PARAM_DATE_LOG_LABEL.log
 
+BOOL_BINARY_CHECK="FALSE"
 
 #######################################################
 #                                                     #
@@ -72,6 +74,35 @@ PARAM_LOGGING_FOOTER="--------------------------------- Logging finishes -------
 # tasks execution.                                                      #
 #                                                                       #
 #########################################################################
+##############################################################
+#                                                            #
+# Check if the binary exists. BOOL_BINARY_CHECK False by     #
+# default. See default flags section.                        #
+#                                                            #
+##############################################################
+function FUNC_PARAM_CHECKS {
+    if [[ -x $BIN_ECHO && \
+        -x $BIN_TOUCH && \
+        -x $BIN_RM && \
+        -x $BIN_SLEEP && \
+        -x $BIN_MKDIR && \
+        -x $BIN_MAILX && \
+        -x $BIN_DIRNAME && \
+        -x $BIN_BASENAME ]]
+    then
+        BOOL_BINARY_CHECK=True
+    fi
+
+	#if [[ ${BOOL_BINARY_CHECK^^} == "TRUE" && ${BOOL_PARAMETER_CHECK^^} == "TRUE" && ${BOOL_MAILING_CHECK^^} == "TRUE" ]]
+	if [[ ${BOOL_BINARY_CHECK^^} == "TRUE" ]]
+	then
+		$BIN_ECHO -e "[info:] $PARAM_DATE_LOG Parameter checks passed, proceed to next stage."
+		return 0
+	else
+		$BIN_ECHO -e "[info:] $PARAM_DATE_LOG Precheck failed. Please check configuration parameters. Exiting script."
+		exit
+	fi
+}
 
 ##################################
 #                                #
@@ -181,11 +212,11 @@ function FUNC_TRANSFER_FILE {
         $BIN_ECHO -e "[xfer:] $PARAM_DATE_LOG └── DTransfer ${ARRAY_CLIENT_CONF[source_dir]}/$PARAM_TARGET_BASE_DIR to ${ARRAY_CLIENT_CONF[destination_dir]}/"
         if [[ $($BIN_ECHO $?) == 1 ]]
         then
-          $BIN_ECHO -e "[err :] $PARAM_DATE_LOG Something went wrong during transfer."
-          PARAM_MAIL_STATUS="ERRORED"
-          return 1
+            $BIN_ECHO -e "[err :] $PARAM_DATE_LOG Something went wrong during transfer."
+            PARAM_MAIL_STATUS="ERRORED"
+            return 1
         fi
-          PARAM_MAIL_STATUS="SUCCESS"
+            PARAM_MAIL_STATUS="SUCCESS"
         return 0
     fi
     if [[ -f $PARAM_TARGET ]]
@@ -193,9 +224,9 @@ function FUNC_TRANSFER_FILE {
         $BIN_ECHO -e "[xfer:] $PARAM_DATE_LOG └── FTransfer ${ARRAY_CLIENT_CONF[source_dir]}/$PARAM_TARGET_BASE_FILE to ${ARRAY_CLIENT_CONF[destination_dir]}/"
         if [[ $($BIN_ECHO $?) == 1 ]]
         then
-          $BIN_ECHO -e "[err :] $PARAM_DATE_LOG Something went wrong during transfer."
-          PARAM_MAIL_STATUS="ERRORED"
-          return 1
+            $BIN_ECHO -e "[err :] $PARAM_DATE_LOG Something went wrong during transfer."
+            PARAM_MAIL_STATUS="ERRORED"
+            return 1
         fi
         PARAM_MAIL_STATUS="SUCCESS"
         return 0
@@ -444,6 +475,7 @@ done
 if [[ ! -n $PARAM_CLIENT_CONF ]]
 then
     FUNC_CHECK_LOCKFILE
+    FUNC_PARAM_CHECKS
     for f in $PARAM_CONF_LIST; do
         PARAM_DATE_LOG=$(FUNC_GET_DATE)
         typeset -A ARRAY_CLIENT_CONF
@@ -464,6 +496,7 @@ else
     typeset -A ARRAY_CLIENT_CONF
     $BIN_ECHO -e "\n[info:] $PARAM_DATE_LOG Read Client config files\t: $PARAM_CLIENT_CONF"
     $BIN_ECHO -e "[info:] $PARAM_DATE_LOG $PARAM_PARSE_HEADER"
+    FUNC_PARAM_CHECKS
     FUNC_CHECK_LOCKFILE
     FUNC_READ_CONF $PARAM_CLIENT_CONF
     FUNC_START_CLIENT_LOG_FILE $PARAM_CLIENT_CONF

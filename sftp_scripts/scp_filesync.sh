@@ -23,7 +23,7 @@ PARAM_OLD_IFS=$IFS
 
 PARAM_MAIL_SUBJECT="--- TRANSFER REPORT ---"
 PARAM_MAIL_STATUS="UNKNOWN"
-PARAM_MAIL_LIST="kaloong@localhost"
+PARAM_MAIL_LIST=""
 
 BIN_ECHO=/bin/echo
 BIN_TOUCH=/bin/touch
@@ -71,6 +71,7 @@ PARAM_LOGGING_FOOTER="--------------------------------- Logging finishes -------
 # If no previous job can be found, then prepare script environment for  #
 # tasks execution.                                                      #
 #                                                                       #
+#########################################################################
 
 ##################################
 #                                #
@@ -125,7 +126,7 @@ function FUNC_GET_DATE {
 function FUNC_READ_CONF {
     local PARAM_FUNC_READ_FILE=$1
     #$BIN_ECHO "[info:]"$_func_param_f
-    IFS=":"
+    IFS="="
     while read -r name value
     do
         if [[ ! -z $name && ! -z $value ]]
@@ -296,13 +297,13 @@ function FUNC_START_CLIENT_LOG_FILE {
 #                                                                       #
 #########################################################################
 function FUNC_MAIL_TRANSFER_LOG {
-	if [[ -n ${PARAM_MAIL_LIST^^} ]]
+	if [[ -n "${ARRAY_CLIENT_CONF[mail_to]}" ]]
 	then
-		$BIN_ECHO -e "[info:] Send mail $PARAM_MAIL_SUBJECT $PARAM_MAIL_STATUS to $PARAM_MAIL_LIST"
+		$BIN_ECHO -e "[info:] $PARAM_DATE_LOG Send mail $PARAM_MAIL_SUBJECT ${ARRAY_CLIENT_CONF[mail_to]}."
 		#$BIN_MAILX -s "$PARAM_MAIL_SUBJECT $PARAM_MAIL_STATUS" $PARAM_MAIL_LIST
 		#$BIN_MAILX -s "$PARAM_MAIL_SUBJECT $PARAM_MAIL_STATUS" $PARAM_MAIL_LIST < $FILE_RESULT_FILE
 	else
-		$BIN_ECHO -e "[info:] PARAM_MAIL_LIST is not set. No mail notification will be sent."
+		$BIN_ECHO -e "[info:] $PARAM_DATE_LOG PARAM_MAIL_LIST is not set. No mail notification will be sent."
 	fi
 	return 0
 }
@@ -316,6 +317,7 @@ set -o errtrace
 set -o errexit
 set -e
 trap '$BIN_ECHO -e "[err :] "Error on $FUNCNAME."' ERR
+trap FUNC_REMOVE_LOCKFILE INT
 #####################################################
 #                                                   #
 # Disable pipefail to prevent egrep from breaking.  #

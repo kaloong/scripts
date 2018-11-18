@@ -10,7 +10,7 @@
 # completed files and move the completed file to another folder.                #
 #                                                                               #
 # Modification History                                                          #
-# 03/11/18 KT - First edition sc_filesync.sh.                                   #
+# 03/11/18 KT - First edition scp_filesync.sh.                                  #
 # 03/11/18 KT -                                                                 #
 #                                                                               #
 #################################################################################
@@ -25,7 +25,7 @@ BIN_TOUCH=/bin/touch
 BIN_RM=/bin/rm
 BIN_SLEEP=/bin/sleep
 BIN_MKDIR=/bin/mkdir
-if [[ $(grep redhat /etc/issue) =~ "Redhat" ]]; then
+if [[ $(head /etc/issue) =~ "Redhat" ]]; then
     BIN_MAILX=/bin/mailx
 else
     BIN_MAILX=/usr/bin/mailx
@@ -46,7 +46,7 @@ PARAM_PARSE_FOOTER="--------------------------------- Parsing finishes ---------
 PARAM_LOGGING_HEADER="---------------------------------- Logging starts ----------------------------------"
 PARAM_LOGGING_FOOTER="--------------------------------- Logging finishes ----------------------------------"
 
-FILE_LOCKFILE=/tmp/read_conf.lock
+FILE_LOCKFILE=/tmp/scp_filesync.lock
 FILE_SCRIPT_LOG_DIR=$($BIN_DIRNAME $0)/logs
 FILE_SCRIPT_LOG=$FILE_SCRIPT_LOG_DIR/$($BIN_BASENAME $0).$PARAM_DATE_LOG_LABEL.log
 
@@ -506,7 +506,7 @@ for f in $PARAM_CONF_LIST; do
         FUNC_STOP_CLIENT_LOG_FILE $f
         FUNC_MAIL_TRANSFER_LOG $PARAM_CLIENT_CONF
     else
-        $BIN_ECHO -e "[info:] $PARAM_DATE_LOG BOOL_CONFIG_CHECK, please check configuration file."
+        $BIN_ECHO -e "[info:] $PARAM_DATE_LOG BOOL_CONFIG_CHECK is not True, please check configuration file."
     fi
     PARAM_DATE_LOG=$(FUNC_GET_DATE)
     $BIN_ECHO -e "[info:] $PARAM_DATE_LOG $PARAM_PARSE_FOOTER"

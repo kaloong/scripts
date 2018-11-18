@@ -2,8 +2,12 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="a83bf0b4-9e83-4df0-9852-a76bcf776e68" name="Default Changelist" comment="Updated the file with dd test commands">
+      <change afterPath="$PROJECT_DIR$/sftp_scripts/logs/Client_1.20181118.log" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/sftp_scripts/logs/Client_2.20181118.log" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/sftp_scripts/logs/Client_3.20181118.log" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/sftp_scripts/logs/read_conf.sh.20181118.log" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sftp_scripts/read_conf.sh" beforeDir="false" afterPath="$PROJECT_DIR$/sftp_scripts/read_conf.sh" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sftp_scripts/scp_filesync.sh" beforeDir="false" afterPath="$PROJECT_DIR$/sftp_scripts/scp_filesync.sh" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -67,13 +71,13 @@
           <entry key="conf" value="25" />
           <entry key="ini" value="6" />
           <entry key="sample" value="1" />
-          <entry key="sh" value="29" />
+          <entry key="sh" value="30" />
           <entry key="txt" value="1" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.open">
         <counts>
-          <entry key="Bash" value="29" />
+          <entry key="Bash" value="30" />
           <entry key="PLAIN_TEXT" value="35" />
         </counts>
       </usages-collector>
@@ -81,56 +85,39 @@
         <counts>
           <entry key="conf" value="2966" />
           <entry key="ini" value="55" />
-          <entry key="sh" value="26076" />
-          <entry key="txt" value="210" />
+          <entry key="sh" value="26463" />
+          <entry key="txt" value="219" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
-          <entry key="Bash" value="26076" />
-          <entry key="PLAIN_TEXT" value="3231" />
+          <entry key="Bash" value="26463" />
+          <entry key="PLAIN_TEXT" value="3240" />
         </counts>
       </usages-collector>
     </session>
   </component>
   <component name="FileEditorManager">
-    <splitter split-orientation="horizontal" split-proportion="0.6538945">
-      <split-first>
-        <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-          <file pinned="false" current-in-tab="true">
-            <entry file="file://$PROJECT_DIR$/sftp_scripts/read_conf.sh">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="615">
-                  <caret line="498" column="70" selection-start-line="498" selection-start-column="70" selection-end-line="498" selection-end-column="70" />
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/sftp_scripts/template.conf.d/sys2/client2.conf">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="495">
-                  <caret line="33" selection-start-line="33" selection-end-line="33" />
-                </state>
-              </provider>
-            </entry>
-          </file>
-        </leaf>
-      </split-first>
-      <split-second>
-        <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-          <file pinned="false" current-in-tab="true">
-            <entry file="file://$PROJECT_DIR$/sftp_scripts/read_conf.sh.bak">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="483">
-                  <caret line="143" column="19" selection-start-line="143" selection-start-column="19" selection-end-line="143" selection-end-column="19" />
-                </state>
-              </provider>
-            </entry>
-          </file>
-        </leaf>
-      </split-second>
-    </splitter>
+    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/sftp_scripts/template.conf.d/sys2/client2.conf">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="60">
+              <caret line="4" column="49" selection-start-line="4" selection-start-column="49" selection-end-line="4" selection-end-column="49" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/sftp_scripts/scp_filesync.sh">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="765">
+              <caret line="508" column="74" selection-start-line="508" selection-start-column="74" selection-end-line="508" selection-end-column="74" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+    </leaf>
   </component>
   <component name="Git.Settings">
     <option name="UPDATE_TYPE" value="MERGE" />
@@ -161,13 +148,13 @@
         <option value="$PROJECT_DIR$/config/functions.sh" />
         <option value="$PROJECT_DIR$/generic_functions.sh" />
         <option value="$PROJECT_DIR$/read_conf.sh" />
-        <option value="$PROJECT_DIR$/sftp_scripts/scp_filesync.sh" />
         <option value="$PROJECT_DIR$/sftp_scripts/template.conf.d/client1.conf" />
         <option value="$PROJECT_DIR$/sftp_scripts/template.conf.d/client2.conf" />
         <option value="$PROJECT_DIR$/sftp_scripts/template.conf.d/client3.conf" />
         <option value="$PROJECT_DIR$/sftp_scripts/template.conf.d/template.conf" />
         <option value="$PROJECT_DIR$/sftp_scripts/template.conf.d/sys2/client2.conf" />
         <option value="$PROJECT_DIR$/sftp_scripts/read_conf.sh" />
+        <option value="$PROJECT_DIR$/sftp_scripts/scp_filesync.sh" />
       </list>
     </option>
   </component>
@@ -205,13 +192,6 @@
               <item name="scripts" type="462c0819:PsiDirectoryNode" />
               <item name="sftp_scripts" type="462c0819:PsiDirectoryNode" />
               <item name="template.conf.d" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="scripts" type="b2602c69:ProjectViewProjectNode" />
-              <item name="scripts" type="462c0819:PsiDirectoryNode" />
-              <item name="sftp_scripts" type="462c0819:PsiDirectoryNode" />
-              <item name="template.conf.d" type="462c0819:PsiDirectoryNode" />
-              <item name="sys1" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="scripts" type="b2602c69:ProjectViewProjectNode" />
@@ -435,7 +415,21 @@
       <option name="project" value="LOCAL" />
       <updated>1542550006275</updated>
     </task>
-    <option name="localTasksCounter" value="25" />
+    <task id="LOCAL-00025" summary="Updated the file with dd test commands">
+      <created>1542550588329</created>
+      <option name="number" value="00025" />
+      <option name="presentableId" value="LOCAL-00025" />
+      <option name="project" value="LOCAL" />
+      <updated>1542550588329</updated>
+    </task>
+    <task id="LOCAL-00026" summary="Updated the file with dd test commands">
+      <created>1542550881585</created>
+      <option name="number" value="00026" />
+      <option name="presentableId" value="LOCAL-00026" />
+      <option name="project" value="LOCAL" />
+      <updated>1542550881585</updated>
+    </task>
+    <option name="localTasksCounter" value="27" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -569,13 +563,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/sftp_scripts/scp_filesync.sh">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="270">
-          <caret line="21" selection-start-line="21" selection-end-line="21" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/sftp_scripts/read_conf.sh.bak">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="483">
@@ -623,17 +610,24 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/sftp_scripts/template.conf.d/sys2/client2.conf">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="495">
-          <caret line="33" selection-start-line="33" selection-end-line="33" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/sftp_scripts/read_conf.sh">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="615">
           <caret line="498" column="70" selection-start-line="498" selection-start-column="70" selection-end-line="498" selection-end-column="70" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/sftp_scripts/template.conf.d/sys2/client2.conf">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="60">
+          <caret line="4" column="49" selection-start-line="4" selection-start-column="49" selection-end-line="4" selection-end-column="49" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/sftp_scripts/scp_filesync.sh">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="765">
+          <caret line="508" column="74" selection-start-line="508" selection-start-column="74" selection-end-line="508" selection-end-column="74" />
         </state>
       </provider>
     </entry>

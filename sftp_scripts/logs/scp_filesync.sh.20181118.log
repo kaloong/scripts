@@ -1,0 +1,214 @@
+[info:] 2018-11-18 14:27:37 PARAM_CONF_LIST: template.conf.d/*/*.conf
+[info:] 2018-11-18 14:27:37 No lock file found.
+[info:] 2018-11-18 14:27:37 Parameter checks passed, proceed to next stage.
+[info:] 2018-11-18 14:27:37 Read Client config files	: template.conf.d/sys1/client1.conf
+[info:] 2018-11-18 14:27:37 ---------------------------------- Parsing starts ----------------------------------
+[info:] 2018-11-18 14:27:37 Read client_name. Client_1.
+[info:] 2018-11-18 14:27:37 Read source_user. mensa.
+[info:] 2018-11-18 14:27:37 Read source_host. 192.168.1.22.
+[info:] 2018-11-18 14:27:37 Read source_key. /home/mensa/.ssh/mensa2.
+[info:] 2018-11-18 14:27:37 Read source_dir. /home/mensa/lv0/lv1.
+[info:] 2018-11-18 14:27:37 Read destination_user. someuser.
+[info:] 2018-11-18 14:27:37 Read destination_key. /home/mensa/.ssh/mensa2.
+[info:] 2018-11-18 14:27:37 Read destination_host. 172.16.1.11.
+[info:] 2018-11-18 14:27:37 Read destination_dir. /home/mensa/lv6.
+[info:] 2018-11-18 14:27:37 Read mail_to. kaloong@localhost,kaloong2@localhost.
+[info:] 2018-11-18 14:27:37 All parameters are defined. Continue.
+[info:] 2018-11-18 14:27:37 log_filename is not defined. Using ./logs/Client_1.20181118.log.
+[info:] 2018-11-18 14:27:39 Send mail --- TRANSFER REPORT --- kaloong@localhost,kaloong2@localhost.
+[info:] 2018-11-18 14:27:41 --------------------------------- Parsing finishes ----------------------------------
+[info:] 2018-11-18 14:27:41 Read Client config files	: template.conf.d/sys2/client2.conf
+[info:] 2018-11-18 14:27:41 ---------------------------------- Parsing starts ----------------------------------
+[info:] 2018-11-18 14:27:41 Read client_name. Client_2.
+[info:] 2018-11-18 14:27:41 Read source_user. mensa.
+[info:] 2018-11-18 14:27:41 Read source_host. 192.168.1.22.
+[info:] 2018-11-18 14:27:41 Read source_key. /home/mensa/.ssh/mensa2.
+[info:] 2018-11-18 14:27:41 Read destination_user. someuser.
+[info:] 2018-11-18 14:27:41 Read destination_key. /home/mensa/.ssh/mensa2.
+[info:] 2018-11-18 14:27:41 Read destination_host. 172.16.1.22.
+[info:] 2018-11-18 14:27:41 Read destination_dir. /home/mensa/lv6.
+[info:] 2018-11-18 14:27:41 Read mail_to. kaloong@localhost,kaloong2@localhost.
+[err :] 2018-11-18 14:27:41 One of more default parameter(s) is missing. Abort.
+[info:] 2018-11-18 14:27:41 log_filename is not defined. Using ./logs/Client_2.20181118.log.
+[info:] 2018-11-18 14:27:41 Send mail --- TRANSFER REPORT --- kaloong@localhost,kaloong2@localhost.
+[info:] 2018-11-18 14:27:41 --------------------------------- Parsing finishes ----------------------------------
+[info:] 2018-11-18 14:27:41 Read Client config files	: template.conf.d/sys3/client3.conf
+[info:] 2018-11-18 14:27:41 ---------------------------------- Parsing starts ----------------------------------
+[info:] 2018-11-18 14:27:41 Read client_name. Client_3.
+[info:] 2018-11-18 14:27:41 Read source_user. mensa.
+[info:] 2018-11-18 14:27:41 Read source_host. 192.168.1.33.
+[info:] 2018-11-18 14:27:41 Read source_key. /home/mensa/.ssh/mensa2.
+[info:] 2018-11-18 14:27:41 Read source_dir. /home/mensa/lv0/lv3.
+[info:] 2018-11-18 14:27:41 Read destination_user. someuser.
+[info:] 2018-11-18 14:27:41 Read destination_key. /home/mensa/.ssh/mensa2.
+[info:] 2018-11-18 14:27:41 Read destination_host. 172.16.1.33.
+[info:] 2018-11-18 14:27:41 Read destination_dir. /home/mensa/lv6.
+[info:] 2018-11-18 14:27:41 Read mail_to. kaloong@localhost,kaloong2@localhost.
+[info:] 2018-11-18 14:27:41 All parameters are defined. Continue.
+[info:] 2018-11-18 14:27:41 log_filename is not defined. Using ./logs/Client_3.20181118.log.
+[info:] 2018-11-18 14:27:51 Send mail --- TRANSFER REPORT --- kaloong@localhost,kaloong2@localhost.
+[info:] 2018-11-18 14:27:54 --------------------------------- Parsing finishes ----------------------------------
+[info:] 2018-11-18 14:27:54 Lock file found. Remove lock file.
+[info:] 2018-11-18 14:29:50 PARAM_CONF_LIST: template.conf.d/*/Client2.conf
+[info:] 2018-11-18 14:29:50 No lock file found.
+[info:] 2018-11-18 14:29:50 Parameter checks passed, proceed to next stage.
+[info:] 2018-11-18 14:29:50 Read Client config files	: template.conf.d/*/Client2.conf
+[info:] 2018-11-18 14:29:50 ---------------------------------- Parsing starts ----------------------------------
+./scp_filesync.sh: line 151: template.conf.d/*/Client2.conf: No such file or directory
+[err :] 2018-11-18 14:29:50 One of more default parameter(s) is missing. Abort.
+[info:] 2018-11-18 14:29:50 BOOL_CONFIG_CHECK, please check configuration file.
+[info:] 2018-11-18 14:29:50 --------------------------------- Parsing finishes ----------------------------------
+[info:] 2018-11-18 14:29:50 Lock file found. Remove lock file.
+[info:] 2018-11-18 14:29:57 PARAM_CONF_LIST: template.conf.d/*/Client2.conf
+[info:] 2018-11-18 14:29:57 No lock file found.
+[info:] 2018-11-18 14:29:57 Parameter checks passed, proceed to next stage.
+[info:] 2018-11-18 14:29:57 Read Client config files	: template.conf.d/*/Client2.conf
+[info:] 2018-11-18 14:29:57 ---------------------------------- Parsing starts ----------------------------------
+./scp_filesync.sh: line 151: template.conf.d/*/Client2.conf: No such file or directory
+[err :] 2018-11-18 14:29:57 One of more default parameter(s) is missing. Abort.
+[info:] 2018-11-18 14:29:57 BOOL_CONFIG_CHECK, please check configuration file.
+[info:] 2018-11-18 14:29:57 --------------------------------- Parsing finishes ----------------------------------
+[info:] 2018-11-18 14:29:57 Lock file found. Remove lock file.
+[info:] 2018-11-18 14:30:29 PARAM_CONF_LIST: template.conf.d/*/client2.conf
+[info:] 2018-11-18 14:30:29 No lock file found.
+[info:] 2018-11-18 14:30:29 Parameter checks passed, proceed to next stage.
+[info:] 2018-11-18 14:30:29 Read Client config files	: template.conf.d/sys2/client2.conf
+[info:] 2018-11-18 14:30:29 ---------------------------------- Parsing starts ----------------------------------
+[info:] 2018-11-18 14:30:29 Read client_name. Client_2.
+[info:] 2018-11-18 14:30:29 Read source_user. mensa.
+[info:] 2018-11-18 14:30:29 Read source_host. 192.168.1.22.
+[info:] 2018-11-18 14:30:29 Read source_key. /home/mensa/.ssh/mensa2.
+[info:] 2018-11-18 14:30:29 Read destination_user. someuser.
+[info:] 2018-11-18 14:30:29 Read destination_key. /home/mensa/.ssh/mensa2.
+[info:] 2018-11-18 14:30:29 Read destination_host. 172.16.1.22.
+[info:] 2018-11-18 14:30:29 Read destination_dir. /home/mensa/lv6.
+[info:] 2018-11-18 14:30:29 Read mail_to. kaloong@localhost,kaloong2@localhost.
+[err :] 2018-11-18 14:30:29 One of more default parameter(s) is missing. Abort.
+[info:] 2018-11-18 14:30:29 BOOL_CONFIG_CHECK, please check configuration file.
+[info:] 2018-11-18 14:30:29 --------------------------------- Parsing finishes ----------------------------------
+[info:] 2018-11-18 14:30:29 Lock file found. Remove lock file.
+[info:] 2018-11-18 15:42:18 PARAM_CONF_LIST: template.conf.d/*/client2.conf
+[info:] 2018-11-18 15:42:18 No lock file found.
+[info:] 2018-11-18 15:42:18 Parameter checks passed, proceed to next stage.
+[info:] 2018-11-18 15:42:18 Read Client config files	: template.conf.d/sys2/client2.conf
+[info:] 2018-11-18 15:42:18 ---------------------------------- Parsing starts ----------------------------------
+[info:] 2018-11-18 15:42:18 Read client_name. Client_2.
+[info:] 2018-11-18 15:42:18 Read source_user. mensa.
+[info:] 2018-11-18 15:42:18 Read source_host. 192.168.1.22.
+[info:] 2018-11-18 15:42:18 Read source_key. /home/mensa/.ssh/mensa2.
+[info:] 2018-11-18 15:42:18 Read destination_user. someuser.
+[info:] 2018-11-18 15:42:18 Read destination_key. /home/mensa/.ssh/mensa2.
+[info:] 2018-11-18 15:42:18 Read destination_host. 172.16.1.22.
+[info:] 2018-11-18 15:42:18 Read destination_dir. /home/mensa/lv6.
+[info:] 2018-11-18 15:42:18 Read mail_to. kaloong@localhost,kaloong2@localhost.
+[err :] 2018-11-18 15:42:18 One of more default parameter(s) is missing. Abort.
+[info:] 2018-11-18 15:42:18 BOOL_CONFIG_CHECK, please check configuration file.
+[info:] 2018-11-18 15:42:18 --------------------------------- Parsing finishes ----------------------------------
+[info:] 2018-11-18 15:42:18 Lock file found. Remove lock file.
+[info:] 2018-11-18 15:42:49 PARAM_CONF_LIST: template.conf.d/*/client2.conf
+[info:] 2018-11-18 15:42:49 No lock file found.
+[info:] 2018-11-18 15:42:49 Precheck failed. Please check configuration parameters. Exiting script.
+[info:] 2018-11-18 15:43:30 PARAM_CONF_LIST: template.conf.d/*/client2.conf
+[info:] 2018-11-18 15:43:30 Lock file found. Please check processes and try again. Exit script.
+[info:] 2018-11-18 15:43:47 PARAM_CONF_LIST: template.conf.d/*/client2.conf
+[info:] 2018-11-18 15:43:47 Lock file found. Please check processes and try again. Exit script.
+[info:] 2018-11-18 15:44:04 PARAM_CONF_LIST: template.conf.d/*/client2.conf
+[info:] 2018-11-18 15:44:04 Lock file found. Please check processes and try again. Exit script.
+[info:] 2018-11-18 15:44:25 PARAM_CONF_LIST: template.conf.d/*/client2.conf
+[info:] 2018-11-18 15:44:25 Lock file found. Please check processes and try again. Exit script.
+[info:] 2018-11-18 15:44:37 PARAM_CONF_LIST: template.conf.d/*/client2.conf
+[info:] 2018-11-18 15:44:37 Lock file found. Please check processes and try again. Exit script.
+[info:] 2018-11-18 15:45:13 PARAM_CONF_LIST: template.conf.d/*/client2.conf
+[info:] 2018-11-18 15:45:13 Lock file found. Please check processes and try again. Exit script.
+[info:] 2018-11-18 15:45:19 PARAM_CONF_LIST: template.conf.d/*/client2.conf
+[info:] 2018-11-18 15:45:19 Lock file found. Please check processes and try again. Exit script.
+[info:] 2018-11-18 15:45:34 PARAM_CONF_LIST: template.conf.d/*/client2.conf
+[info:] 2018-11-18 15:45:34 Lock file found. Please check processes and try again. Exit script.
+[info:] 2018-11-18 15:46:11 PARAM_CONF_LIST: template.conf.d/*/client2.conf
+[info:] 2018-11-18 15:46:11 Lock file found. Please check processes and try again. Exit script.
+[info:] 2018-11-18 15:46:37 PARAM_CONF_LIST: template.conf.d/*/client2.conf
+[info:] 2018-11-18 15:46:37 Lock file found. Please check processes and try again. Exit script.
+[info:] 2018-11-18 15:46:47 PARAM_CONF_LIST: template.conf.d/*/client2.conf
+[info:] 2018-11-18 15:46:47 Lock file found. Please check processes and try again. Exit script.
+[info:] 2018-11-18 15:47:00 PARAM_CONF_LIST: template.conf.d/*/client2.conf
+[info:] 2018-11-18 15:47:00 Lock file found. Please check processes and try again. Exit script.
+[info:] 2018-11-18 15:47:08 PARAM_CONF_LIST: template.conf.d/*/client2.conf
+[info:] 2018-11-18 15:47:08 Lock file found. Please check processes and try again. Exit script.
+[info:] 2018-11-18 15:47:22 PARAM_CONF_LIST: template.conf.d/*/client2.conf
+[info:] 2018-11-18 15:47:22 Lock file found. Please check processes and try again. Exit script.
+[info:] 2018-11-18 15:48:00 PARAM_CONF_LIST: template.conf.d/*/client2.conf
+[info:] 2018-11-18 15:48:00 Lock file found. Please check processes and try again. Exit script.
+[info:] 2018-11-18 16:08:15 PARAM_CONF_LIST: template.conf.d/*/client2.conf
+[info:] 2018-11-18 16:08:15 Lock file found. Please check processes and try again. Exit script.
+[info:] 2018-11-18 16:10:25 PARAM_CONF_LIST: template.conf.d/*/client2.conf
+[info:] 2018-11-18 16:10:25 No lock file found.
+[info:] 2018-11-18 16:10:25 Parameter checks passed, proceed to next stage.
+[info:] 2018-11-18 16:10:25 Read Client config files	: template.conf.d/sys2/client2.conf
+[info:] 2018-11-18 16:10:25 ---------------------------------- Parsing starts ----------------------------------
+[info:] 2018-11-18 16:10:25 Read client_name. Client_2.
+[info:] 2018-11-18 16:10:25 Read source_user. mensa.
+[info:] 2018-11-18 16:10:25 Read source_host. 192.168.1.22.
+[info:] 2018-11-18 16:10:25 Read source_key. /home/mensa/.ssh/mensa2.
+[info:] 2018-11-18 16:10:25 Read destination_user. someuser.
+[info:] 2018-11-18 16:10:25 Read destination_key. /home/mensa/.ssh/mensa2.
+[info:] 2018-11-18 16:10:25 Read destination_host. 172.16.1.22.
+[info:] 2018-11-18 16:10:25 Read destination_dir. /home/mensa/lv6.
+[info:] 2018-11-18 16:10:25 Read mail_to. kaloong@localhost,kaloong2@localhost.
+[err :] 2018-11-18 16:10:25 One of more default parameter(s) is missing. Abort.
+[info:] 2018-11-18 16:10:25 BOOL_CONFIG_CHECK, please check configuration file.
+[info:] 2018-11-18 16:10:25 --------------------------------- Parsing finishes ----------------------------------
+[info:] 2018-11-18 16:10:25 Lock file found. Remove lock file.
+[info:] 2018-11-18 16:11:53 PARAM_CONF_LIST: template.conf.d/*/client2.conf
+[info:] 2018-11-18 16:11:53 No lock file found.
+[info:] 2018-11-18 16:11:53 Parameter checks passed, proceed to next stage.
+[info:] 2018-11-18 16:11:53 Read Client config files	: template.conf.d/sys2/client2.conf
+[info:] 2018-11-18 16:11:53 ---------------------------------- Parsing starts ----------------------------------
+[info:] 2018-11-18 16:11:53 Read client_name. Client_2.
+[info:] 2018-11-18 16:11:53 Read source_user. mensa.
+[info:] 2018-11-18 16:11:53 Read source_host. 192.168.1.22.
+[info:] 2018-11-18 16:11:53 Read source_key. /home/mensa/.ssh/mensa2.
+[info:] 2018-11-18 16:11:53 Read destination_user. someuser.
+[info:] 2018-11-18 16:11:53 Read destination_key. /home/mensa/.ssh/mensa2.
+[info:] 2018-11-18 16:11:53 Read destination_host. 172.16.1.22.
+[info:] 2018-11-18 16:11:53 Read destination_dir. /home/mensa/lv6.
+[info:] 2018-11-18 16:11:53 Read mail_to. kaloong@localhost,kaloong2@localhost.
+[err :] 2018-11-18 16:11:53 One of more default parameter(s) is missing. Abort.
+[info:] 2018-11-18 16:11:53 BOOL_CONFIG_CHECK is not set to TRUE, please check configuration file.
+[info:] 2018-11-18 16:11:53 --------------------------------- Parsing finishes ----------------------------------
+[info:] 2018-11-18 16:11:53 Lock file found. Remove lock file.
+[info:] 2018-11-18 16:12:10 PARAM_CONF_LIST: template.conf.d/*/client2.conf
+[info:] 2018-11-18 16:12:10 No lock file found.
+[info:] 2018-11-18 16:12:10 Parameter checks passed, proceed to next stage.
+[info:] 2018-11-18 16:12:10 Read Client config files	: template.conf.d/sys2/client2.conf
+[info:] 2018-11-18 16:12:10 ---------------------------------- Parsing starts ----------------------------------
+[info:] 2018-11-18 16:12:10 Read client_name. Client_2.
+[info:] 2018-11-18 16:12:11 Read source_user. mensa.
+[info:] 2018-11-18 16:12:11 Read source_host. 192.168.1.22.
+[info:] 2018-11-18 16:12:11 Read source_key. /home/mensa/.ssh/mensa2.
+[info:] 2018-11-18 16:12:11 Read destination_user. someuser.
+[info:] 2018-11-18 16:12:11 Read destination_key. /home/mensa/.ssh/mensa2.
+[info:] 2018-11-18 16:12:11 Read destination_host. 172.16.1.22.
+[info:] 2018-11-18 16:12:11 Read destination_dir. /home/mensa/lv6.
+[info:] 2018-11-18 16:12:11 Read mail_to. kaloong@localhost,kaloong2@localhost.
+[err :] 2018-11-18 16:12:11 One of more default parameter(s) is missing. Abort.
+[info:] 2018-11-18 16:12:11 BOOL_CONFIG_CHECK fails, please check configuration file.
+[info:] 2018-11-18 16:12:11 --------------------------------- Parsing finishes ----------------------------------
+[info:] 2018-11-18 16:12:11 Lock file found. Remove lock file.
+[info:] 2018-11-18 16:12:34 PARAM_CONF_LIST: template.conf.d/*/client2.conf
+[info:] 2018-11-18 16:12:34 No lock file found.
+[info:] 2018-11-18 16:12:34 Parameter checks passed, proceed to next stage.
+[info:] 2018-11-18 16:12:34 Read Client config files	: template.conf.d/sys2/client2.conf
+[info:] 2018-11-18 16:12:34 ---------------------------------- Parsing starts ----------------------------------
+[info:] 2018-11-18 16:12:34 Read client_name. Client_2.
+[info:] 2018-11-18 16:12:34 Read source_user. mensa.
+[info:] 2018-11-18 16:12:34 Read source_host. 192.168.1.22.
+[info:] 2018-11-18 16:12:34 Read source_key. /home/mensa/.ssh/mensa2.
+[info:] 2018-11-18 16:12:34 Read destination_user. someuser.
+[info:] 2018-11-18 16:12:34 Read destination_key. /home/mensa/.ssh/mensa2.
+[info:] 2018-11-18 16:12:34 Read destination_host. 172.16.1.22.
+[info:] 2018-11-18 16:12:34 Read destination_dir. /home/mensa/lv6.
+[info:] 2018-11-18 16:12:34 Read mail_to. kaloong@localhost,kaloong2@localhost.
+[err :] 2018-11-18 16:12:34 One of more default parameter(s) is missing. Abort.
+[info:] 2018-11-18 16:12:34 BOOL_CONFIG_CHECK is not True, please check configuration file.
+[info:] 2018-11-18 16:12:34 --------------------------------- Parsing finishes ----------------------------------
+[info:] 2018-11-18 16:12:34 Lock file found. Remove lock file.

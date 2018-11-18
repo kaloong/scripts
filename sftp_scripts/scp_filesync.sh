@@ -51,6 +51,7 @@ FILE_SCRIPT_LOG_DIR=$($BIN_DIRNAME $0)/logs
 FILE_SCRIPT_LOG=$FILE_SCRIPT_LOG_DIR/$($BIN_BASENAME $0).$PARAM_DATE_LOG_LABEL.log
 
 BOOL_BINARY_CHECK="FALSE"
+BOOL_CONFIG_CHECK="FALSE"
 
 if [[ ! -d "$FILE_SCRIPT_LOG_DIR" ]]
 then
@@ -181,6 +182,23 @@ function FUNC_READ_CONF {
             fi
         fi
     done < $PARAM_FUNC_READ_FILE
+    # Test if variable exist.
+    if  [[  -v ARRAY_CLIENT_CONF["client_name"] &&
+            -v ARRAY_CLIENT_CONF["source_user"] &&
+            -v ARRAY_CLIENT_CONF["source_host"] &&
+            -v ARRAY_CLIENT_CONF["source_key"] &&
+            -v ARRAY_CLIENT_CONF["source_dir"] &&
+            -v ARRAY_CLIENT_CONF["destination_user"] &&
+            -v ARRAY_CLIENT_CONF["destination_key"] &&
+            -v ARRAY_CLIENT_CONF["destination_host"] &&
+            -v ARRAY_CLIENT_CONF["destination_dir"] &&
+            -v ARRAY_CLIENT_CONF["mail_to"] ]]
+    then
+        $BIN_ECHO -e "[info:] $PARAM_DATE_LOG All parameters are defined. Continue."
+        BOOL_CONFIG_CHECK=TRUE
+    else
+        $BIN_ECHO -e "[err :] $PARAM_DATE_LOG One of more default parameter(s) is missing. Abort."
+    fi
     #Very import to unset IFS or any upcoming loops will fail.
     unset IFS
     return
@@ -204,6 +222,7 @@ function FUNC_TRANSFER_FILE {
     if [[ -d $PARAM_TARGET ]]
     then
         $BIN_ECHO -e "[xfer:] $PARAM_DATE_LOG └── DTransfer ${ARRAY_CLIENT_CONF[source_dir]}/$PARAM_TARGET_BASE_DIR to ${ARRAY_CLIENT_CONF[destination_dir]}/"
+        # scp directory within root
         if [[ $($BIN_ECHO $?) == 1 ]]
         then
             $BIN_ECHO -e "[err :] $PARAM_DATE_LOG Something went wrong during transfer."
@@ -216,6 +235,7 @@ function FUNC_TRANSFER_FILE {
     if [[ -f $PARAM_TARGET ]]
     then
         $BIN_ECHO -e "[xfer:] $PARAM_DATE_LOG └── FTransfer ${ARRAY_CLIENT_CONF[source_dir]}/$PARAM_TARGET_BASE_FILE to ${ARRAY_CLIENT_CONF[destination_dir]}/"
+        # scp files
         if [[ $($BIN_ECHO $?) == 1 ]]
         then
             $BIN_ECHO -e "[err :] $PARAM_DATE_LOG Something went wrong during transfer."
@@ -476,14 +496,18 @@ FUNC_PARAM_CHECKS
 for f in $PARAM_CONF_LIST; do
     PARAM_DATE_LOG=$(FUNC_GET_DATE)
     typeset -A ARRAY_CLIENT_CONF
-    $BIN_ECHO -e "\n[info:] $PARAM_DATE_LOG Read Client config files\t: $f"
+    $BIN_ECHO -e "[info:] $PARAM_DATE_LOG Read Client config files\t: $f"
     $BIN_ECHO -e "[info:] $PARAM_DATE_LOG $PARAM_PARSE_HEADER"
     FUNC_READ_CONF $f
-
-    FUNC_START_CLIENT_LOG_FILE $f
-    FUNC_INSPECT_SOURCE_DIR $f
-    FUNC_STOP_CLIENT_LOG_FILE $f
-    FUNC_MAIL_TRANSFER_LOG $PARAM_CLIENT_CONF
+    if [[ ${BOOL_CONFIG_CHECK^^} =~ "TRUE" ]]
+    then
+        FUNC_START_CLIENT_LOG_FILE $f
+        FUNC_INSPECT_SOURCE_DIR $f
+        FUNC_STOP_CLIENT_LOG_FILE $f
+        FUNC_MAIL_TRANSFER_LOG $PARAM_CLIENT_CONF
+    else
+        $BIN_ECHO -e "[info:] $PARAM_DATE_LOG BOOL_CONFIG_CHECK, please check configuration file."
+    fi
     PARAM_DATE_LOG=$(FUNC_GET_DATE)
     $BIN_ECHO -e "[info:] $PARAM_DATE_LOG $PARAM_PARSE_FOOTER"
     unset -v ARRAY_CLIENT_CONF

@@ -365,10 +365,10 @@ function FUNC_CHECK_LOCKFILE {
 	######################################################
 	if [[ -e $FILE_LOCKFILE ]]
 	then
-		$BIN_ECHO -e "[info:] Lock file found. Please check processes and try again. Exit script."
+		$BIN_ECHO -e "[info:] $PARAM_DATE_LOG Lock file found. Please check processes and try again. Exit script."
 		exit 1
 	else
-		$BIN_ECHO -e "[info:] No lock file found."
+		$BIN_ECHO -e "[info:] $PARAM_DATE_LOG No lock file found."
 		$BIN_TOUCH $FILE_LOCKFILE
 		return 0
 	fi
@@ -384,10 +384,10 @@ function FUNC_REMOVE_LOCKFILE {
 	######################################################
 	if [[ -e $FILE_LOCKFILE ]]
 	then
-		$BIN_ECHO -e "[info:] Lock file found. Remove lock file."
+		$BIN_ECHO -e "[info:] $PARAM_DATE_LOG Lock file found. Remove lock file."
 		$BIN_RM $FILE_LOCKFILE >/dev/null 2>&1
 	else
-		$BIN_ECHO -e "[info:] No lock file found."
+		$BIN_ECHO -e "[info:] $PARAM_DATE_LOG No lock file found."
 	fi
 	return 0
 }

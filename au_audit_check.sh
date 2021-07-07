@@ -19,8 +19,30 @@
 #               then append the pathname back to the aureport.                  #
 #             - Added help function and redirect to /dev/tty when run from      #
 #               command line.                                                   #
+#             - Updated PARAM_AU_AUDIT_MAIL_LIST                                #
+# 22/11/18 KT - Move lock file from /usr/local/admin to /tmp                    #
+#               Remove -f flag from remove lock file operation to make script   #
+#               safer.                                                          #
+# 16/10/19 KT - Added export timezone in order to reduce the amount of syscalls #
+#               created by the script. Use strace to see it for yourself.       #
+#                                                                               #
+#    stat("/etc/localtime", {st_mode=S_IFREG|0644, st_size=3661, ...}_ =0       #
+#                                                                               #
+#            - Removed duplicate set -e as set -o errexit aldready exists.      #
 #                                                                               #
 #################################################################################
+
+#############################################
+#                                           #
+# The most interesting part of the script.  #
+# The question is: Is this an Optimisation  #
+# or bugfix?                                #
+#                                           #
+# And would we see it elsewhere on other    #
+# script?                                   #
+#                                           #
+#############################################
+export TZ=:/etc/localtime
 
 ######################
 #                    #
@@ -519,7 +541,7 @@ function FUNC_REMOVE_LOCKFILE {
 	if [[ -e $FILE_AU_AUDIT_LOCK ]] 
 	then
 		$BIN_ECHO -e "[info:] Lock file found. Remove lock file."
-		$BIN_RM -f $FILE_AU_AUDIT_LOCK >/dev/null 2>&1
+		$BIN_RM $FILE_AU_AUDIT_LOCK >/dev/null 2>&1
 	else
 		$BIN_ECHO -e "[info:] No lock file found."
 	fi

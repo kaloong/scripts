@@ -495,7 +495,7 @@ function FUNC_SHOW_CMD_HELP {
 	#######################################################################
 	#                                                                     #
 	# Display help when running from command line. User can specify       #
-	# different options, in order to run the facility on an ad hoc bases. #
+	# different options, in order to run the facility on an ad hoc basis. #
 	#                                                                     #
 	#######################################################################
 	$BIN_ECHO -e "\nUsage:"
